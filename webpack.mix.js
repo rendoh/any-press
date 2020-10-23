@@ -11,4 +11,4 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.ts('resources/src/main.ts', 'public/assets');
+mix.ts('resources/src/app.tsx', 'public/assets');
