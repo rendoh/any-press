@@ -1,54 +1,30 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
-import { useFormik } from 'formik';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Colors } from '../../constants/styles';
-import { LoginFormValues } from '../../types/auth';
 import { ValidationMessages } from '../../resources/messages';
 import { useLoginUseCase } from '../../hooks/usecases/auth';
+import { LoginValues } from '../../api/auth';
 
 const Login: FC = () => {
   const login = useLoginUseCase();
-  const {
-    values,
-    handleChange,
-    handleSubmit,
-    isSubmitting,
-    errors,
-    touched,
-    isValid,
-  } = useFormik<LoginFormValues>({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema: loginSchema,
-    async onSubmit(value) {
-      await login(value);
-    },
+  const { register, handleSubmit, formState, errors } = useForm<LoginValues>({
+    resolver: yupResolver(loginSchema),
+    mode: 'onTouched',
   });
+  const { isSubmitting, isValid } = formState;
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit(login)}>
       <FormRow>
-        <Input
-          name="email"
-          type="email"
-          value={values.email}
-          onChange={handleChange}
-        />
-        {touched.email && errors.email && <Feedback>{errors.email}</Feedback>}
+        <Input name="email" type="email" ref={register} />
+        {errors.email && <Feedback>{errors.email.message}</Feedback>}
       </FormRow>
       <FormRow>
-        <Input
-          name="password"
-          type="password"
-          value={values.password}
-          onChange={handleChange}
-        />
-        {touched.password && errors.password && (
-          <Feedback>{errors.password}</Feedback>
-        )}
+        <Input name="password" type="password" ref={register} />
+        {errors.password && <Feedback>{errors.password.message}</Feedback>}
       </FormRow>
       <Button type="submit" disabled={isSubmitting || !isValid}>
         ログイン
@@ -59,7 +35,7 @@ const Login: FC = () => {
 
 export default Login;
 
-const loginSchema = Yup.object().shape<LoginFormValues>({
+const loginSchema = Yup.object().shape<LoginValues>({
   email: Yup.string()
     .email(ValidationMessages.email)
     .required(ValidationMessages.required),

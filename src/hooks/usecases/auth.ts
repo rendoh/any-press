@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { login, logout } from '../../api/auth';
+import { login, LoginValues, logout } from '../../api/auth';
 import { Paths } from '../../components/Routes';
-import { LoginFormValues } from '../../types/auth';
 import { toastErrorResponse } from '../../utils/toast';
 import { useSetAuthenticatedUser } from '../recoil/auth';
 
@@ -18,7 +17,7 @@ export function useLoginUseCase() {
   const setAuthenticatedUser = useSetAuthenticatedUser();
   const navigate = useNavigate();
 
-  return (value: LoginFormValues) =>
+  return (value: LoginValues) =>
     login(value)
       .then(({ data }) => {
         setAuthenticatedUser(data);
