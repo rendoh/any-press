@@ -1,5 +1,5 @@
 import { atom, selector, useRecoilValue, useSetRecoilState } from 'recoil';
-import { User } from '../types/user';
+import { User } from '../../types/user';
 
 const authenticatedUserState = atom<User | null>({
   key: 'authenticatedUserState',

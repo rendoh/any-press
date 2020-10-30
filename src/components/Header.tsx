@@ -1,11 +1,14 @@
 import styled from '@emotion/styled';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuthenticatedUser } from '../store/auth';
+import { useAuthenticatedUser } from '../hooks/recoil/auth';
+import { useLogoutUseCase } from '../hooks/usecases/auth';
 import { Paths } from './Routes';
 
 const Header: FC = () => {
   const authenticatedUser = useAuthenticatedUser();
+  const handleClickLogout = useLogoutUseCase();
+
   return (
     <Wrapper>
       <NabBar>
@@ -15,7 +18,9 @@ const Header: FC = () => {
             {authenticatedUser.name}
             <Menu>
               <MenuButton type="button">ダミーボタン</MenuButton>
-              <MenuButton type="button">ログアウト</MenuButton>
+              <MenuButton type="button" onClick={handleClickLogout}>
+                ログアウト
+              </MenuButton>
             </Menu>
           </Account>
         ) : (

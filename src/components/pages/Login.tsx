@@ -2,18 +2,13 @@ import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../../api/auth';
 import { Colors } from '../../constants/styles';
 import { LoginFormValues } from '../../types/auth';
-import { Paths } from '../Routes';
 import { ValidationMessages } from '../../resources/messages';
-import { toastErrorResponse } from '../../utils/toast';
-import { useSetAuthenticatedUser } from '../../store/auth';
+import { useLoginUseCase } from '../../hooks/usecases/auth';
 
 const Login: FC = () => {
-  const navigate = useNavigate();
-  const setAuthenticatedUser = useSetAuthenticatedUser();
+  const login = useLoginUseCase();
   const {
     values,
     handleChange,
@@ -28,16 +23,8 @@ const Login: FC = () => {
       password: '',
     },
     validationSchema: loginSchema,
-    async onSubmit(value, { setSubmitting }) {
-      return login(value)
-        .then(({ data }) => {
-          setAuthenticatedUser(data);
-          navigate(Paths.home);
-        })
-        .catch(toastErrorResponse)
-        .finally(() => {
-          setSubmitting(false);
-        });
+    async onSubmit(value) {
+      await login(value);
     },
   });
 
