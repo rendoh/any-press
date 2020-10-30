@@ -3,8 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="{{ mix('assets/app.js') }}" defer></script>
         <title>{{ config('app.name') }}</title>
+        <script src="{{ mix('assets/app.js') }}" defer></script>
+        <script>window.__INITIAL_DATA__={user:@json(Auth::user())};</script>
     </head>
     <body>
         <div id="root"></div>

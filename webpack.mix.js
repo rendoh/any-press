@@ -1,14 +1,28 @@
 const mix = require('laravel-mix');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel applications. By default, we are compiling the CSS
- | file for the application as well as bundling up all the JS files.
- |
+/**
+ * Babel を使うために、 mix.ts API を使わずに TypeScript をビルドする
+ *
+ * - mix.react を用いる
+ * - ts, tsx ファイルにbabel-loaderを適用
+ * - .babelrc にて下記 preset を適用
+ *   - @babel/preset-react
+ *   - @babel/preset-typescript
+ * - webpack plugin で type check
  */
 
-mix.ts('src/app.tsx', 'public/assets');
+mix.react('src/app.tsx', 'public/assets').webpackConfig({
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'babel-loader',
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx'],
+  },
+  plugins: [new ForkTsCheckerWebpackPlugin()],
+});
