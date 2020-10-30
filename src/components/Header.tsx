@@ -13,7 +13,7 @@ const Header: FC = () => {
     <Wrapper>
       <NabBar>
         <Logo to={Paths.home}>HOME</Logo>
-        {!!authenticatedUser ? (
+        {authenticatedUser ? (
           <Account>
             {authenticatedUser.name}
             <Menu>

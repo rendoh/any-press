@@ -4,6 +4,8 @@ import 'ress';
 import 'react-toastify/dist/ReactToastify.css';
 
 const render = () => {
+  // Hot Module Replacement
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const App = require('./components/App').default;
   ReactDOM.render(<App />, document.getElementById('root'));
 };
