@@ -15,4 +15,17 @@ class UserService
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    public function update(User $user, array $data): User
+    {
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->save();
+        return $user;
+    }
+
+    public function getAsAccount(User $user): User
+    {
+        return $user->makeVisible('email');
+    }
 }
