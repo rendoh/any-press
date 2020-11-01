@@ -19,9 +19,9 @@ const Login: FC = () => {
     resolver: yupResolver(loginSchema),
     mode: 'onTouched',
   });
+  const { isSubmitting, isValid } = formState;
   const setAuthenticatedUser = useSetAuthenticatedUser();
   const navigate = useNavigate();
-  const { isSubmitting, isValid } = formState;
   const onSubmit: SubmitHandler<LoginValues> = async (values) => {
     return login(values)
       .then(({ data }) => {
@@ -32,16 +32,13 @@ const Login: FC = () => {
         if (e instanceof ApiError) {
           const { message, errors }: ApiError<LoginErrors> = e;
           toast.error(message);
-          if (errors.email?.length) {
-            setError('email', {
-              message: errors.email[0],
-            });
-          }
-          if (errors.password?.length) {
-            setError('password', {
-              message: errors.password[0],
-            });
-          }
+          Object.entries(errors).forEach(([key, messages]) => {
+            if (messages && messages.length > 0) {
+              setError(key as keyof LoginErrors, {
+                message: messages[0],
+              });
+            }
+          });
         }
       });
   };
