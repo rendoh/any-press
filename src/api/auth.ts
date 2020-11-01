@@ -6,6 +6,11 @@ export type LoginValues = {
   password: string;
 };
 
+export type LoginErrors = {
+  email?: string[];
+  password?: string[];
+};
+
 export async function login(values: LoginValues) {
   return apiClient.post<User>('/login', values);
 }

@@ -1,23 +1,53 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Colors } from '../../constants/styles';
 import { ValidationMessages } from '../../resources/messages';
-import { useLoginUseCase } from '../../hooks/usecases/auth';
-import { LoginValues } from '../../api/auth';
+import { login, LoginErrors, LoginValues } from '../../api/auth';
+import { useSetAuthenticatedUser } from '../../hooks/recoil/auth';
+import { Paths } from '../Routes';
+import { ApiError } from '../../api/ApiError';
 
 const Login: FC = () => {
-  const login = useLoginUseCase();
-  const { register, handleSubmit, formState, errors } = useForm<LoginValues>({
+  const { register, handleSubmit, formState, errors, setError } = useForm<
+    LoginValues
+  >({
     resolver: yupResolver(loginSchema),
     mode: 'onTouched',
   });
+  const setAuthenticatedUser = useSetAuthenticatedUser();
+  const navigate = useNavigate();
   const { isSubmitting, isValid } = formState;
+  const onSubmit: SubmitHandler<LoginValues> = async (values) => {
+    return login(values)
+      .then(({ data }) => {
+        setAuthenticatedUser(data);
+        navigate(Paths.home);
+      })
+      .catch((e) => {
+        if (e instanceof ApiError) {
+          const { message, errors }: ApiError<LoginErrors> = e;
+          toast.error(message);
+          if (errors.email?.length) {
+            setError('email', {
+              message: errors.email[0],
+            });
+          }
+          if (errors.password?.length) {
+            setError('password', {
+              message: errors.password[0],
+            });
+          }
+        }
+      });
+  };
 
   return (
-    <Form onSubmit={handleSubmit(login)}>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow>
         <Input name="email" type="email" ref={register} />
         {errors.email && <Feedback>{errors.email.message}</Feedback>}

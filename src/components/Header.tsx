@@ -1,13 +1,20 @@
 import styled from '@emotion/styled';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuthenticatedUser } from '../hooks/recoil/auth';
-import { useLogoutUseCase } from '../hooks/usecases/auth';
+import { logout } from '../api/auth';
+import {
+  useAuthenticatedUser,
+  useSetAuthenticatedUser,
+} from '../hooks/recoil/auth';
 import { Paths } from './Routes';
 
 const Header: FC = () => {
   const authenticatedUser = useAuthenticatedUser();
-  const handleClickLogout = useLogoutUseCase();
+  const setAuthenticatedUser = useSetAuthenticatedUser();
+  const handleLogoutClick = () => {
+    logout();
+    setAuthenticatedUser(null);
+  };
 
   return (
     <Wrapper>
@@ -18,7 +25,7 @@ const Header: FC = () => {
             {authenticatedUser.name}
             <Menu>
               <MenuButton type="button">ダミーボタン</MenuButton>
-              <MenuButton type="button" onClick={handleClickLogout}>
+              <MenuButton type="button" onClick={handleLogoutClick}>
                 ログアウト
               </MenuButton>
             </Menu>
