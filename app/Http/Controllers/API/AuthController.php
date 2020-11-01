@@ -19,7 +19,7 @@ class AuthController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
+            'email' => [trans('メールアドレスまたはパスワードが正しくありません')],
         ]);
     }
 
