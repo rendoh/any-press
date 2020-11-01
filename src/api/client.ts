@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { ErrorMessages, ErrorResponse } from '../types/error';
+import { ErrorFields, ErrorResponse } from '../types/error';
 import { ApiError } from './ApiError';
 
 export const apiClient = axios.create({
@@ -14,11 +14,11 @@ export const apiClient = axios.create({
  */
 apiClient.interceptors.response.use(undefined, (e: unknown) => {
   let message = 'エラーが発生しました';
-  let errors: ErrorMessages = {};
+  let fields: ErrorFields = {};
   if (e instanceof Error && 'isAxiosError' in e) {
     const error: AxiosError<ErrorResponse> = e;
     message = error.response?.data.message ?? message;
-    errors = error.response?.data.errors ?? errors;
+    fields = error.response?.data.errors ?? fields;
   }
-  throw new ApiError(message, errors);
+  throw new ApiError(message, fields);
 });

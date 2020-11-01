@@ -3,45 +3,42 @@ import styled from '@emotion/styled';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Colors } from '../../constants/styles';
 import { ValidationMessages } from '../../resources/messages';
 import { login, LoginErrors, LoginValues } from '../../api/auth';
-import { useSetAuthenticatedUser } from '../../hooks/recoil/auth';
+import {
+  useIsAuthenticated,
+  useSetAuthenticatedUser,
+} from '../../hooks/recoil/auth';
 import { Paths } from '../Routes';
 import { ApiError } from '../../api/ApiError';
 
 const Login: FC = () => {
-  const { register, handleSubmit, formState, errors, setError } = useForm<
-    LoginValues
-  >({
+  const { register, handleSubmit, formState, errors } = useForm<LoginValues>({
     resolver: yupResolver(loginSchema),
     mode: 'onTouched',
   });
   const { isSubmitting, isValid } = formState;
   const setAuthenticatedUser = useSetAuthenticatedUser();
-  const navigate = useNavigate();
   const onSubmit: SubmitHandler<LoginValues> = async (values) => {
     return login(values)
       .then(({ data }) => {
         setAuthenticatedUser(data);
-        navigate(Paths.home);
       })
       .catch((e) => {
         if (e instanceof ApiError) {
-          const { message, errors }: ApiError<LoginErrors> = e;
-          toast.error(message);
-          Object.entries(errors).forEach(([key, messages]) => {
-            if (messages && messages.length > 0) {
-              setError(key as keyof LoginErrors, {
-                message: messages[0],
-              });
-            }
-          });
+          const { messages }: ApiError<LoginErrors> = e;
+          messages.forEach((message) => toast.error(message));
         }
       });
   };
+
+  const isAuthenticated = useIsAuthenticated();
+  if (isAuthenticated) {
+    return <Navigate to={Paths.home} />;
+  }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
