@@ -6,10 +6,11 @@ import { Colors } from '../../constants/styles';
 
 type LoaderProps = {
   inline?: boolean;
+  backdrop?: boolean;
 };
 
-const Loader: FC<LoaderProps> = ({ inline }) => (
-  <Wrapper inline={inline}>
+const Loader: FC<LoaderProps> = ({ inline, backdrop }) => (
+  <Wrapper inline={inline} backdrop={backdrop}>
     <MoonLoader color={Colors.primary} size={40} />
   </Wrapper>
 );
@@ -28,8 +29,10 @@ const overlayStyle = css`
   z-index: 9;
 `;
 
-type WrapperProps = Pick<LoaderProps, 'inline'>;
+type WrapperProps = Pick<LoaderProps, 'inline' | 'backdrop'>;
 const Wrapper = styled.div<WrapperProps>`
   display: ${({ inline }) => (inline ? 'inline-block' : 'block')};
   ${({ inline }) => !inline && overlayStyle};
+  background: ${({ backdrop }) =>
+    backdrop ? 'rgba(255, 255, 255, .7)' : 'none'};
 `;

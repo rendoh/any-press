@@ -17,11 +17,6 @@ export type UserUpdateValues = {
   email: string;
 };
 
-export type UserUpdateErrors = {
-  email?: string[];
-  password?: string[];
-};
-
 export async function fetchUserAccount() {
   return apiClient.get<UserAccount>('/user');
 }

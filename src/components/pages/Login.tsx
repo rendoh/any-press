@@ -7,7 +7,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Colors } from '../../constants/styles';
 import { ValidationMessages } from '../../resources/messages';
-import { login, LoginErrors, LoginValues } from '../../api/auth';
+import { login, LoginValues } from '../../api/auth';
 import {
   useIsAuthenticated,
   useSetAuthenticatedUser,
@@ -16,9 +16,11 @@ import { Paths } from '../../constants/paths';
 import { ApiError } from '../../api/ApiError';
 
 const Login: FC = () => {
-  const { register, handleSubmit, formState, errors } = useForm<LoginValues>({
-    resolver: yupResolver(loginSchema),
+  const { register, handleSubmit, formState, errors, setError } = useForm<
+    LoginValues
+  >({
     mode: 'onTouched',
+    resolver: yupResolver(validationSchema),
   });
   const { isSubmitting, isValid } = formState;
   const setAuthenticatedUser = useSetAuthenticatedUser();
@@ -30,10 +32,18 @@ const Login: FC = () => {
         setAuthenticatedUser(data);
         redirect();
       })
-      .catch((e) => {
-        if (e instanceof ApiError) {
-          const { messages }: ApiError<LoginErrors> = e;
-          messages.forEach((message) => toast.error(message));
+      .catch((error) => {
+        if (error instanceof ApiError) {
+          error
+            .getFieldErrorMessages()
+            .forEach((message) => toast.error(message));
+          error
+            .getFieldErrorEntries(['email', 'password'])
+            .forEach(([key, message]) => {
+              setError(key, {
+                message,
+              });
+            });
         }
       });
   };
@@ -46,11 +56,21 @@ const Login: FC = () => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow>
-        <Input name="email" type="email" ref={register} />
+        <Input
+          name="email"
+          type="email"
+          ref={register}
+          invalid={!!errors.email}
+        />
         {errors.email && <Feedback>{errors.email.message}</Feedback>}
       </FormRow>
       <FormRow>
-        <Input name="password" type="password" ref={register} />
+        <Input
+          name="password"
+          type="password"
+          ref={register}
+          invalid={!!errors.password}
+        />
         {errors.password && <Feedback>{errors.password.message}</Feedback>}
       </FormRow>
       <Button type="submit" disabled={isSubmitting || !isValid}>
@@ -78,7 +98,7 @@ function useRedirectToStatePath() {
   };
 }
 
-const loginSchema = Yup.object().shape<LoginValues>({
+const validationSchema = Yup.object().shape<LoginValues>({
   email: Yup.string()
     .email(ValidationMessages.email)
     .required(ValidationMessages.required),
@@ -98,15 +118,15 @@ const FormRow = styled.div`
   margin-bottom: 20px;
 `;
 
-const Input = styled.input`
+type InputProps = { invalid?: boolean };
+const Input = styled.input<InputProps>`
   width: 100%;
-  background: #fff;
-  box-shadow: inset 0 0 0 100px #fff;
+  background: ${({ invalid }) => (invalid ? `${Colors.error}22` : '#fff')};
   padding: 10px;
 `;
 
 const Feedback = styled.p`
-  color: #b84646;
+  color: ${Colors.error};
   font-size: 12px;
   margin-top: 10px;
 `;

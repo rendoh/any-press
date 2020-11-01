@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { ErrorMessages } from '../resources/messages';
 import { ErrorFields, ErrorResponse } from '../types/error';
 import { ApiError } from './ApiError';
 
@@ -13,7 +14,7 @@ export const apiClient = axios.create({
  * 発生したエラーを ApiError に変換して投げる
  */
 apiClient.interceptors.response.use(undefined, (e: unknown) => {
-  let message = 'エラーが発生しました';
+  let message = ErrorMessages.connection;
   let fields: ErrorFields = {};
   if (e instanceof Error && 'isAxiosError' in e) {
     const error: AxiosError<ErrorResponse> = e;
