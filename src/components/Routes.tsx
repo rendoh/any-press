@@ -1,6 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
-import Login from './pages/Login';
+import Loader from './core/Loader';
+const Login = React.lazy(() => import('./pages/Login'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
 
 const Routes: FC = () => {
   return useRoutes([
@@ -10,12 +12,28 @@ const Routes: FC = () => {
     },
     {
       path: Paths.login,
-      element: <Login />,
+      element: (
+        <AsyncRoute>
+          <Login />
+        </AsyncRoute>
+      ),
+    },
+    {
+      path: '*',
+      element: (
+        <AsyncRoute>
+          <NotFound />
+        </AsyncRoute>
+      ),
     },
   ]);
 };
 
 export default Routes;
+
+const AsyncRoute: FC = ({ children }) => {
+  return <Suspense fallback={<Loader />}>{children}</Suspense>;
+};
 
 export const Paths = {
   home: '/',
