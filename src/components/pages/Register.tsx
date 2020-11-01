@@ -1,44 +1,37 @@
 import React, { FC } from 'react';
-import styled from '@emotion/styled';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { Link, Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { ValidationMessages } from '../../resources/messages';
-import { login, LoginValues } from '../../api/auth';
-import {
-  useIsAuthenticated,
-  useSetAuthenticatedUser,
-} from '../../hooks/recoil/auth';
-import { Paths } from '../../constants/paths';
 import { ApiError } from '../../api/ApiError';
-import TinyFormInput from '../form/TinyForm/TinyFormInput';
-import TinyFormRow from '../form/TinyForm/TinyFormRow';
+import { registerUser, UserRegistrationValues } from '../../api/user';
+import { Paths } from '../../constants/paths';
+import { useIsAuthenticated } from '../../hooks/recoil/auth';
+import { ValidationMessages } from '../../resources/messages';
+import styled from '@emotion/styled';
 import TinyForm from '../form/TinyForm/TinyForm';
-import Feedback from '../form/Feedback';
+import TinyFormRow from '../form/TinyForm/TinyFormRow';
 import TinyFormRowLabel from '../form/TinyForm/TinyFormRowLabel';
+import TinyFormInput from '../form/TinyForm/TinyFormInput';
 import TinyFormButton from '../form/TinyForm/TinyFormButton';
+import Feedback from '../form/Feedback';
 import TinyFormTitle from '../form/TinyForm/TinyFormTitle';
 import TinyFormFooter from '../form/TinyForm/TinyFormFooter';
 import Loader from '../core/Loader';
 
-const Login: FC = () => {
-  const { register, handleSubmit, formState, errors, setError } = useForm<
-    LoginValues
+const Register: FC = () => {
+  const { handleSubmit, register, errors, setError, formState } = useForm<
+    UserRegistrationValues
   >({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
   });
   const { isSubmitting } = formState;
-  const setAuthenticatedUser = useSetAuthenticatedUser();
-  const { redirect } = useRedirectToStatePath();
-
-  const onSubmit: SubmitHandler<LoginValues> = async (values) => {
-    return login(values)
-      .then(({ data }) => {
-        setAuthenticatedUser(data);
-        redirect();
+  const onSubmit: SubmitHandler<UserRegistrationValues> = async (values) => {
+    return registerUser(values)
+      .then(() => {
+        console.log('registered');
       })
       .catch((error) => {
         if (error instanceof ApiError) {
@@ -64,13 +57,24 @@ const Login: FC = () => {
   return (
     <Wrapper>
       <TinyForm onSubmit={handleSubmit(onSubmit)}>
-        <TinyFormTitle>ログイン</TinyFormTitle>
+        <TinyFormTitle>ユーザー登録</TinyFormTitle>
+        <TinyFormRow>
+          <TinyFormRowLabel htmlFor="name">ユーザ名</TinyFormRowLabel>
+          <TinyFormInput
+            type="text"
+            id="name"
+            name="name"
+            ref={register}
+            invalid={!!errors.name}
+          />
+          {errors.name && <Feedback>{errors.name.message}</Feedback>}
+        </TinyFormRow>
         <TinyFormRow>
           <TinyFormRowLabel htmlFor="email">メールアドレス</TinyFormRowLabel>
           <TinyFormInput
+            type="email"
             id="email"
             name="email"
-            type="email"
             ref={register}
             invalid={!!errors.email}
           />
@@ -79,19 +83,34 @@ const Login: FC = () => {
         <TinyFormRow>
           <TinyFormRowLabel htmlFor="password">パスワード</TinyFormRowLabel>
           <TinyFormInput
+            type="password"
             id="password"
             name="password"
-            type="password"
             ref={register}
             invalid={!!errors.password}
           />
           {errors.password && <Feedback>{errors.password.message}</Feedback>}
         </TinyFormRow>
+        <TinyFormRow>
+          <TinyFormRowLabel htmlFor="password_confirmation">
+            パスワード（確認）
+          </TinyFormRowLabel>
+          <TinyFormInput
+            type="password"
+            id="password_confirmation"
+            name="password_confirmation"
+            ref={register}
+            invalid={!!errors.password_confirmation}
+          />
+          {errors.password_confirmation && (
+            <Feedback>{errors.password_confirmation.message}</Feedback>
+          )}
+        </TinyFormRow>
         <TinyFormButton type="submit" disabled={isSubmitting}>
-          ログイン
+          ユーザ登録
         </TinyFormButton>
         <TinyFormFooter>
-          <Link to={Paths.register}>新規ユーザ登録</Link>
+          <Link to={Paths.login}>ログイン</Link>
         </TinyFormFooter>
       </TinyForm>
       {isSubmitting && <Loader backdrop />}
@@ -99,29 +118,17 @@ const Login: FC = () => {
   );
 };
 
-export default Login;
+export default Register;
 
-type RouterState = {
-  from?: string;
-} | null;
-
-function useRedirectToStatePath() {
-  const state: RouterState = useLocation().state;
-  const navigate = useNavigate();
-
-  return {
-    redirect() {
-      const to = state && state.from ? state.from : Paths.home;
-      navigate(to);
-    },
-  };
-}
-
-const validationSchema = Yup.object().shape<LoginValues>({
+const validationSchema = Yup.object().shape<UserRegistrationValues>({
+  name: Yup.string().required(ValidationMessages.required),
   email: Yup.string()
     .email(ValidationMessages.email)
     .required(ValidationMessages.required),
   password: Yup.string().required(ValidationMessages.required),
+  password_confirmation: Yup.string()
+    .oneOf([Yup.ref('password')], ValidationMessages.passwordConfirmation)
+    .required(ValidationMessages.required),
 });
 
 const Wrapper = styled.div`

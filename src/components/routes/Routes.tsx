@@ -7,6 +7,7 @@ import AsyncRoute from './AsyncRoute';
 import PrivateRoute from './PrivateRoute';
 
 const Login = React.lazy(() => import('../pages/Login'));
+const Register = React.lazy(() => import('../pages/Register'));
 const AccountSettings = React.lazy(() => import('../pages/AccountSettings'));
 const NotFound = React.lazy(() => import('../pages/NotFound'));
 
@@ -18,6 +19,10 @@ const publicRoutes: PartialRouteObject[] = [
   {
     path: Paths.login,
     element: <Login />,
+  },
+  {
+    path: Paths.register,
+    element: <Register />,
   },
   {
     path: '*',
