@@ -1,12 +1,13 @@
-import styled from '@emotion/styled';
 import React, { FC } from 'react';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { logout } from '../api/auth';
 import {
   useAuthenticatedUser,
   useSetAuthenticatedUser,
 } from '../hooks/recoil/auth';
-import { Paths } from './Routes';
+import { Paths } from '../constants/paths';
 
 const Header: FC = () => {
   const authenticatedUser = useAuthenticatedUser();
@@ -24,14 +25,14 @@ const Header: FC = () => {
           <Account>
             {authenticatedUser.name}
             <Menu>
-              <MenuButton type="button">ダミーボタン</MenuButton>
+              <MenuLink to={Paths.accountSettings}>アカウント編集</MenuLink>
               <MenuButton type="button" onClick={handleLogoutClick}>
                 ログアウト
               </MenuButton>
             </Menu>
           </Account>
         ) : (
-          <ButtonLink to={Paths.login}>LOGIN</ButtonLink>
+          <LoginButton to={Paths.login}>LOGIN</LoginButton>
         )}
       </NabBar>
     </Wrapper>
@@ -65,7 +66,7 @@ const Logo = styled(Link)`
   text-decoration: none;
 `;
 
-const ButtonLink = styled(Link)`
+const LoginButton = styled(Link)`
   border: 1px solid #f1f1f1;
   text-decoration: none;
   color: #333;
@@ -94,9 +95,19 @@ const Account = styled.div`
   }
 `;
 
-const MenuButton = styled.button`
+const menuButtonStyle = css`
   padding: 10px 20px;
   display: block;
   width: 100%;
   text-align: left;
+`;
+
+const MenuButton = styled.button`
+  ${menuButtonStyle};
+`;
+
+const MenuLink = styled(Link)`
+  ${menuButtonStyle};
+  text-decoration: none;
+  color: inherit;
 `;

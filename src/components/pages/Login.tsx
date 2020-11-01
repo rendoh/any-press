@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Colors } from '../../constants/styles';
 import { ValidationMessages } from '../../resources/messages';
@@ -12,7 +12,7 @@ import {
   useIsAuthenticated,
   useSetAuthenticatedUser,
 } from '../../hooks/recoil/auth';
-import { Paths } from '../Routes';
+import { Paths } from '../../constants/paths';
 import { ApiError } from '../../api/ApiError';
 
 const Login: FC = () => {
@@ -22,10 +22,13 @@ const Login: FC = () => {
   });
   const { isSubmitting, isValid } = formState;
   const setAuthenticatedUser = useSetAuthenticatedUser();
+  const { redirect } = useRedirectToStatePath();
+
   const onSubmit: SubmitHandler<LoginValues> = async (values) => {
     return login(values)
       .then(({ data }) => {
         setAuthenticatedUser(data);
+        redirect();
       })
       .catch((e) => {
         if (e instanceof ApiError) {
@@ -58,6 +61,22 @@ const Login: FC = () => {
 };
 
 export default Login;
+
+type RouterState = {
+  from?: string;
+} | null;
+
+function useRedirectToStatePath() {
+  const state: RouterState = useLocation().state;
+  const navigate = useNavigate();
+
+  return {
+    redirect() {
+      const to = state && state.from ? state.from : Paths.home;
+      navigate(to);
+    },
+  };
+}
 
 const loginSchema = Yup.object().shape<LoginValues>({
   email: Yup.string()

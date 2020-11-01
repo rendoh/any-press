@@ -5,9 +5,6 @@ export type User = {
   updated_at: string;
 };
 
-export type UserRegistrationFormValues = {
-  name: string;
+export type UserAccount = User & {
   email: string;
-  password: string;
-  password_confirmation: string;
 };
