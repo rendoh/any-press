@@ -13,6 +13,9 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
  */
 
 mix.react('src/app.tsx', 'public/assets').webpackConfig({
+  output: {
+    chunkFilename: 'assets/[id].js',
+  },
   module: {
     rules: [
       {
