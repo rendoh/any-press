@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 /**
  * Babel を使うために、 mix.ts API を使わずに TypeScript をビルドする
@@ -27,5 +28,8 @@ mix.react('src/app.tsx', 'public/assets').webpackConfig({
   resolve: {
     extensions: ['.ts', '.tsx'],
   },
-  plugins: [new ForkTsCheckerWebpackPlugin()],
+  plugins: [
+    new ForkTsCheckerWebpackPlugin(),
+    // new BundleAnalyzerPlugin()
+  ],
 });
