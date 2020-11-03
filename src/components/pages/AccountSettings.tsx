@@ -1,13 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { ApiError } from '../../api/ApiError';
 import { updateUser, UserUpdateValues, fetchUserAccount } from '../../api/user';
 import { useSetAuthenticatedUser } from '../../hooks/recoil/auth';
 import { ErrorMessages, ValidationMessages } from '../../resources/messages';
-import Loader from '../core/Loader';
+import { Alert, Button, Loader } from 'rsuite';
 
 const AccountSettings: FC = () => {
   const setAuthenticatedUser = useSetAuthenticatedUser();
@@ -29,13 +28,13 @@ const AccountSettings: FC = () => {
       .then(({ data }) => {
         setAuthenticatedUser(data);
         reset(data);
-        toast.success('アカウント情報を更新しました');
+        Alert.success('アカウント情報を更新しました');
       })
       .catch((error) => {
         if (error instanceof ApiError) {
-          error
-            .getFieldErrorMessages()
-            .forEach((message) => toast.error(message));
+          error.getFieldErrorMessages().forEach((message) => {
+            Alert.warning(message);
+          });
           error
             .getFieldErrorEntries(['name', 'email'])
             .forEach(([key, message]) => {
@@ -55,7 +54,7 @@ const AccountSettings: FC = () => {
         reset(data);
       })
       .catch(() => {
-        toast.error(ErrorMessages.connection);
+        Alert.warning(ErrorMessages.connection);
       })
       .finally(() => {
         setIsLoading(false);
@@ -73,9 +72,12 @@ const AccountSettings: FC = () => {
           <input type="email" name="email" ref={register} />
           {errors.email && <p>{errors.email.message}</p>}
         </div>
-        <button type="submit" disabled={isSubmitting || !isValid}>
+        <Button type="submit" disabled={isSubmitting || !isValid}>
           更新
-        </button>
+        </Button>
+        <Button type="button" appearance="primary">
+          更新
+        </Button>
       </form>
       {isLoading && <Loader backdrop />}
     </>

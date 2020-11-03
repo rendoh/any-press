@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'ress';
-import 'react-toastify/dist/ReactToastify.css';
+import { Alert } from 'rsuite';
+import 'rsuite/lib/styles/index.less';
 
 const render = () => {
   // Hot Module Replacement
@@ -15,3 +15,7 @@ render();
 if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./components/App', render);
 }
+
+Alert.config({
+  duration: 5000,
+});

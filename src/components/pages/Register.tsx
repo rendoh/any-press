@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { ApiError } from '../../api/ApiError';
@@ -10,15 +9,9 @@ import { Paths } from '../../constants/paths';
 import { useIsAuthenticated } from '../../hooks/recoil/auth';
 import { ValidationMessages } from '../../resources/messages';
 import styled from '@emotion/styled';
-import TinyForm from '../form/TinyForm/TinyForm';
-import TinyFormRow from '../form/TinyForm/TinyFormRow';
-import TinyFormRowLabel from '../form/TinyForm/TinyFormRowLabel';
-import TinyFormInput from '../form/TinyForm/TinyFormInput';
-import TinyFormButton from '../form/TinyForm/TinyFormButton';
-import Feedback from '../form/Feedback';
-import TinyFormTitle from '../form/TinyForm/TinyFormTitle';
-import TinyFormFooter from '../form/TinyForm/TinyFormFooter';
-import Loader from '../core/Loader';
+import MinimalForm from '../form/MinimalForm';
+import Field from '../form/Field';
+import { Alert, Button, Input, Loader } from 'rsuite';
 
 const Register: FC = () => {
   const { handleSubmit, register, errors, setError, formState } = useForm<
@@ -27,17 +20,17 @@ const Register: FC = () => {
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
   });
-  const { isSubmitting } = formState;
+  const { isSubmitting, isSubmitSuccessful } = formState;
   const onSubmit: SubmitHandler<UserRegistrationValues> = async (values) => {
     return registerUser(values)
       .then(() => {
-        console.log('registered');
+        console.log('TODO: メールをお送りしました（実は送ってないことは内緒）');
       })
       .catch((error) => {
         if (error instanceof ApiError) {
-          error
-            .getFieldErrorMessages()
-            .forEach((message) => toast.error(message));
+          error.getFieldErrorMessages().forEach((message) => {
+            Alert.warning(message);
+          });
           error
             .getFieldErrorEntries(['email', 'password'])
             .forEach(([key, message]) => {
@@ -54,67 +47,64 @@ const Register: FC = () => {
     return <Navigate to={Paths.home} />;
   }
 
+  if (isSubmitSuccessful) {
+    <Completed>
+      TODO: メールをお送りしました（実は送ってないことは内緒）
+    </Completed>;
+  }
+
   return (
-    <Wrapper>
-      <TinyForm onSubmit={handleSubmit(onSubmit)}>
-        <TinyFormTitle>ユーザー登録</TinyFormTitle>
-        <TinyFormRow>
-          <TinyFormRowLabel htmlFor="name">ユーザ名</TinyFormRowLabel>
-          <TinyFormInput
-            type="text"
-            id="name"
-            name="name"
-            ref={register}
-            invalid={!!errors.name}
-          />
-          {errors.name && <Feedback>{errors.name.message}</Feedback>}
-        </TinyFormRow>
-        <TinyFormRow>
-          <TinyFormRowLabel htmlFor="email">メールアドレス</TinyFormRowLabel>
-          <TinyFormInput
-            type="email"
-            id="email"
-            name="email"
-            ref={register}
-            invalid={!!errors.email}
-          />
-          {errors.email && <Feedback>{errors.email.message}</Feedback>}
-        </TinyFormRow>
-        <TinyFormRow>
-          <TinyFormRowLabel htmlFor="password">パスワード</TinyFormRowLabel>
-          <TinyFormInput
-            type="password"
+    <>
+      <MinimalForm header="ユーザ登録" onSubmit={handleSubmit(onSubmit)}>
+        <Field label="ユーザ名" htmlFor="name" error={errors.name?.message}>
+          <Input id="name" name="name" type="text" inputRef={register} />
+        </Field>
+        <Field
+          label="メールアドレス"
+          htmlFor="email"
+          error={errors.email?.message}
+        >
+          <Input id="email" name="email" type="email" inputRef={register} />
+        </Field>
+        <Field
+          label="パスワード"
+          htmlFor="password"
+          error={errors.password?.message}
+        >
+          <Input
             id="password"
             name="password"
-            ref={register}
-            invalid={!!errors.password}
-          />
-          {errors.password && <Feedback>{errors.password.message}</Feedback>}
-        </TinyFormRow>
-        <TinyFormRow>
-          <TinyFormRowLabel htmlFor="password_confirmation">
-            パスワード（確認）
-          </TinyFormRowLabel>
-          <TinyFormInput
             type="password"
+            inputRef={register}
+          />
+        </Field>
+        <Field
+          label="パスワード（確認）"
+          htmlFor="password_confirmation"
+          error={errors.password_confirmation?.message}
+        >
+          <Input
             id="password_confirmation"
             name="password_confirmation"
-            ref={register}
-            invalid={!!errors.password_confirmation}
+            type="password"
+            inputRef={register}
           />
-          {errors.password_confirmation && (
-            <Feedback>{errors.password_confirmation.message}</Feedback>
-          )}
-        </TinyFormRow>
-        <TinyFormButton type="submit" disabled={isSubmitting}>
+        </Field>
+        <Button
+          appearance="primary"
+          type="submit"
+          disabled={isSubmitting}
+          block
+          ripple={false}
+        >
           ユーザ登録
-        </TinyFormButton>
-        <TinyFormFooter>
+        </Button>
+        <FormFooter>
           <Link to={Paths.login}>ログイン</Link>
-        </TinyFormFooter>
-      </TinyForm>
+        </FormFooter>
+      </MinimalForm>
       {isSubmitting && <Loader backdrop />}
-    </Wrapper>
+    </>
   );
 };
 
@@ -131,10 +121,9 @@ const validationSchema = Yup.object().shape<UserRegistrationValues>({
     .required(ValidationMessages.required),
 });
 
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 50px 20px;
-  min-height: 80vh;
+const Completed = styled.div``;
+
+const FormFooter = styled.div`
+  margin-top: 20px;
+  text-align: center;
 `;

@@ -13,23 +13,40 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
  * - webpack plugin で type check
  */
 
-mix.react('src/app.tsx', 'public/assets').webpackConfig({
-  output: {
-    chunkFilename: 'assets/[id].js',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'babel-loader',
-      },
+mix
+  .react('src/app.tsx', 'public/assets')
+  .options({
+    postCss: [require('autoprefixer')],
+  })
+  .webpackConfig({
+    output: {
+      chunkFilename: 'assets/[id].js',
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'babel-loader',
+        },
+        {
+          test: /\.less$/,
+          loader: 'less-loader', // compiles Less to CSS
+          options: {
+            lessOptions: {
+              javascriptEnabled: true,
+              modifyVars: {
+                '@base-color': '#f44336',
+              },
+            },
+          },
+        },
+      ],
+    },
+    resolve: {
+      extensions: ['.ts', '.tsx'],
+    },
+    plugins: [
+      new ForkTsCheckerWebpackPlugin(),
+      // new BundleAnalyzerPlugin()
     ],
-  },
-  resolve: {
-    extensions: ['.ts', '.tsx'],
-  },
-  plugins: [
-    new ForkTsCheckerWebpackPlugin(),
-    // new BundleAnalyzerPlugin()
-  ],
-});
+  });

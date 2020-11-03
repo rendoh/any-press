@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ValidationMessages } from '../../resources/messages';
 import { login, LoginValues } from '../../api/auth';
 import {
@@ -13,15 +12,9 @@ import {
 } from '../../hooks/recoil/auth';
 import { Paths } from '../../constants/paths';
 import { ApiError } from '../../api/ApiError';
-import TinyFormInput from '../form/TinyForm/TinyFormInput';
-import TinyFormRow from '../form/TinyForm/TinyFormRow';
-import TinyForm from '../form/TinyForm/TinyForm';
-import Feedback from '../form/Feedback';
-import TinyFormRowLabel from '../form/TinyForm/TinyFormRowLabel';
-import TinyFormButton from '../form/TinyForm/TinyFormButton';
-import TinyFormTitle from '../form/TinyForm/TinyFormTitle';
-import TinyFormFooter from '../form/TinyForm/TinyFormFooter';
-import Loader from '../core/Loader';
+import { Alert, Button, Input, Loader } from 'rsuite';
+import Field from '../form/Field';
+import MinimalForm from '../form/MinimalForm';
 
 const Login: FC = () => {
   const { register, handleSubmit, formState, errors, setError } = useForm<
@@ -42,9 +35,9 @@ const Login: FC = () => {
       })
       .catch((error) => {
         if (error instanceof ApiError) {
-          error
-            .getFieldErrorMessages()
-            .forEach((message) => toast.error(message));
+          error.getFieldErrorMessages().forEach((message) => {
+            Alert.warning(message);
+          });
           error
             .getFieldErrorEntries(['email', 'password'])
             .forEach(([key, message]) => {
@@ -62,40 +55,42 @@ const Login: FC = () => {
   }
 
   return (
-    <Wrapper>
-      <TinyForm onSubmit={handleSubmit(onSubmit)}>
-        <TinyFormTitle>ログイン</TinyFormTitle>
-        <TinyFormRow>
-          <TinyFormRowLabel htmlFor="email">メールアドレス</TinyFormRowLabel>
-          <TinyFormInput
-            id="email"
-            name="email"
-            type="email"
-            ref={register}
-            invalid={!!errors.email}
-          />
-          {errors.email && <Feedback>{errors.email.message}</Feedback>}
-        </TinyFormRow>
-        <TinyFormRow>
-          <TinyFormRowLabel htmlFor="password">パスワード</TinyFormRowLabel>
-          <TinyFormInput
+    <>
+      <MinimalForm header="ログイン" onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          label="メールアドレス"
+          htmlFor="email"
+          error={errors.email?.message}
+        >
+          <Input id="email" name="email" type="email" inputRef={register} />
+        </Field>
+        <Field
+          label="パスワード"
+          htmlFor="password"
+          error={errors.password?.message}
+        >
+          <Input
             id="password"
             name="password"
             type="password"
-            ref={register}
-            invalid={!!errors.password}
+            inputRef={register}
           />
-          {errors.password && <Feedback>{errors.password.message}</Feedback>}
-        </TinyFormRow>
-        <TinyFormButton type="submit" disabled={isSubmitting}>
+        </Field>
+        <Button
+          appearance="primary"
+          type="submit"
+          disabled={isSubmitting}
+          block
+          ripple={false}
+        >
           ログイン
-        </TinyFormButton>
-        <TinyFormFooter>
+        </Button>
+        <FormFooter>
           <Link to={Paths.register}>新規ユーザ登録</Link>
-        </TinyFormFooter>
-      </TinyForm>
+        </FormFooter>
+      </MinimalForm>
       {isSubmitting && <Loader backdrop />}
-    </Wrapper>
+    </>
   );
 };
 
@@ -124,10 +119,7 @@ const validationSchema = Yup.object().shape<LoginValues>({
   password: Yup.string().required(ValidationMessages.required),
 });
 
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 50px 20px;
-  min-height: 80vh;
+const FormFooter = styled.div`
+  margin-top: 20px;
+  text-align: center;
 `;

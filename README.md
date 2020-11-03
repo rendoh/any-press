@@ -21,3 +21,8 @@ $ npm run prod # build
 ```
 
 ※ここでは Babel Plugin を使うために、 TypeScript のトランスパイルも Babel で行う（詳細は `webpack.mix.js`参照）
+
+## TODO
+
+- [ ] SESSION_LIFETIME 401, 419
+- [ ] remember token
