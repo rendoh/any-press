@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { logout } from '../api/auth';
-import { Dropdown, Nav, Navbar } from 'rsuite';
+import { Avatar, Dropdown, Icon, Nav, Navbar } from 'rsuite';
 
 import {
   useAuthenticatedUser,
@@ -26,8 +26,23 @@ const Header: FC = () => {
       <Navbar.Body>
         <Nav pullRight>
           {authenticatedUser ? (
-            <Dropdown
-              title={authenticatedUser.name}
+            <AvatarDropdown
+              title={
+                <AvatarRow>
+                  {authenticatedUser.avatar ? (
+                    <AvatarRowImage
+                      circle
+                      src={authenticatedUser.avatar}
+                      alt=""
+                    />
+                  ) : (
+                    <AvatarRowImage circle alt="">
+                      <Icon icon="user" />
+                    </AvatarRowImage>
+                  )}
+                  {authenticatedUser.name}
+                </AvatarRow>
+              }
               trigger={['hover', 'click']}
               placement="bottomEnd"
             >
@@ -37,7 +52,7 @@ const Header: FC = () => {
               <Dropdown.Item onSelect={handleLogoutClick}>
                 ログアウト
               </Dropdown.Item>
-            </Dropdown>
+            </AvatarDropdown>
           ) : (
             <>
               <Nav.Item componentClass={Link} to={Paths.register}>
@@ -63,4 +78,22 @@ const Logo = styled(Link)`
   height: 100%;
   align-items: center;
   padding: 0 20px;
+`;
+
+const AvatarDropdown = styled(Dropdown)`
+  > a {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    align-items: center;
+  }
+`;
+
+const AvatarRow = styled.span`
+  display: flex;
+  align-items: center;
+`;
+
+const AvatarRowImage = styled(Avatar)`
+  margin-right: 10px;
 `;

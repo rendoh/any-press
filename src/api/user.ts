@@ -15,6 +15,7 @@ export async function registerUser(values: UserRegistrationValues) {
 export type UserUpdateValues = {
   name: string;
   email: string;
+  avatar?: string;
 };
 
 export async function fetchUserAccount() {

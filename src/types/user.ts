@@ -3,6 +3,7 @@ export type User = {
   name: string;
   created_at: string;
   updated_at: string;
+  avatar?: string;
 };
 
 export type UserAccount = User & {

@@ -6,9 +6,10 @@ import { ApiError } from '../../api/ApiError';
 import { updateUser, UserUpdateValues, fetchUserAccount } from '../../api/user';
 import { useSetAuthenticatedUser } from '../../hooks/recoil/auth';
 import { ErrorMessages, ValidationMessages } from '../../resources/messages';
-import { Alert, Button, Input, Loader } from 'rsuite';
+import { Alert, Button, Icon, IconButton, Input, Loader } from 'rsuite';
 import Field from '../form/Field';
 import styled from '@emotion/styled';
+import AvatarUploader from '../form/AvatarUploader';
 
 const AccountSettings: FC = () => {
   const setAuthenticatedUser = useSetAuthenticatedUser();
@@ -19,6 +20,8 @@ const AccountSettings: FC = () => {
     errors,
     reset,
     setError,
+    watch,
+    setValue,
   } = useForm<UserUpdateValues>({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
@@ -63,10 +66,34 @@ const AccountSettings: FC = () => {
       });
   }, [reset]);
 
+  useEffect(() => {
+    register({ name: 'avatar' });
+  }, [register]);
+
+  const avatar = watch('avatar');
+
   return (
     <Wrapper>
       <Heading>アカウント編集</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <Field label="アバター">
+          <UploaderWrapper>
+            <Uploader
+              image={avatar}
+              onSuccess={(filePath) => {
+                setValue('avatar', filePath);
+              }}
+            />
+            {avatar && (
+              <RemoveButton
+                circle
+                icon={<Icon icon="close" />}
+                size="sm"
+                onClick={() => setValue('avatar', '')}
+              />
+            )}
+          </UploaderWrapper>
+        </Field>
         <Field label="ユーザ名" htmlFor="name" error={errors.name?.message}>
           <Input id="name" name="name" inputRef={register} type="text" />
         </Field>
@@ -110,4 +137,22 @@ const Heading = styled.h1`
   font-size: 20px;
   line-height: 1.5;
   margin-bottom: 25px;
+`;
+
+const uploaderSize = 200;
+
+const UploaderWrapper = styled.div`
+  width: ${uploaderSize}px;
+  position: relative;
+`;
+
+const Uploader = styled(AvatarUploader)`
+  width: ${uploaderSize}px;
+  height: ${uploaderSize}px;
+`;
+
+const RemoveButton = styled(IconButton)`
+  position: absolute !important;
+  top: 10px;
+  right: 10px;
 `;

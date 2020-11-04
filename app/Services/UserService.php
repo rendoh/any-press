@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 
 class UserService
 {
@@ -20,6 +21,7 @@ class UserService
     {
         $user->name = $data['name'];
         $user->email = $data['email'];
+        $user->avatar = $data['avatar'];
         $user->save();
         return $user;
     }
