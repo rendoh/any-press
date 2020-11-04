@@ -6,7 +6,10 @@ import * as Yup from 'yup';
 import { ApiError } from '../../api/ApiError';
 import { registerUser, UserRegistrationValues } from '../../api/user';
 import { Paths } from '../../constants/paths';
-import { useIsAuthenticated } from '../../hooks/recoil/auth';
+import {
+  useIsAuthenticated,
+  useSetAuthenticatedUser,
+} from '../../hooks/recoil/auth';
 import { ValidationMessages } from '../../resources/messages';
 import styled from '@emotion/styled';
 import MinimalForm from '../form/MinimalForm';
@@ -14,17 +17,18 @@ import Field from '../form/Field';
 import { Alert, Button, Input, Loader } from 'rsuite';
 
 const Register: FC = () => {
+  const setAuthenticatedUser = useSetAuthenticatedUser();
   const { handleSubmit, register, errors, setError, formState } = useForm<
     UserRegistrationValues
   >({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
   });
-  const { isSubmitting, isSubmitSuccessful } = formState;
+  const { isSubmitting } = formState;
   const onSubmit: SubmitHandler<UserRegistrationValues> = async (values) => {
     return registerUser(values)
-      .then(() => {
-        console.log('TODO: メールをお送りしました（実は送ってないことは内緒）');
+      .then(({ data }) => {
+        setAuthenticatedUser(data);
       })
       .catch((error) => {
         if (error instanceof ApiError) {
@@ -45,12 +49,6 @@ const Register: FC = () => {
   const isAuthenticated = useIsAuthenticated();
   if (isAuthenticated) {
     return <Navigate to={Paths.home} />;
-  }
-
-  if (isSubmitSuccessful) {
-    <Completed>
-      TODO: メールをお送りしました（実は送ってないことは内緒）
-    </Completed>;
   }
 
   return (

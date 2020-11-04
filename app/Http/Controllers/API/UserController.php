@@ -7,6 +7,7 @@ use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -14,6 +15,7 @@ class UserController extends Controller
     {
         $user = $userService->create($request->validated());
         event(new Registered($user));
+        Auth::login($user);
 
         return response()->json($user, 201);
     }
