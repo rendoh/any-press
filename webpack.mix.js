@@ -36,6 +36,8 @@ mix
               javascriptEnabled: true,
               modifyVars: {
                 '@base-color': '#f44336',
+                '@font-family-base':
+                  '"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif',
               },
             },
           },
