@@ -6,7 +6,9 @@ import { ApiError } from '../../api/ApiError';
 import { updateUser, UserUpdateValues, fetchUserAccount } from '../../api/user';
 import { useSetAuthenticatedUser } from '../../hooks/recoil/auth';
 import { ErrorMessages, ValidationMessages } from '../../resources/messages';
-import { Alert, Button, Loader } from 'rsuite';
+import { Alert, Button, Input, Loader } from 'rsuite';
+import Field from '../form/Field';
+import styled from '@emotion/styled';
 
 const AccountSettings: FC = () => {
   const setAuthenticatedUser = useSetAuthenticatedUser();
@@ -21,7 +23,7 @@ const AccountSettings: FC = () => {
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
   });
-  const { isSubmitting, isValid } = formState;
+  const { isSubmitting } = formState;
 
   const onSubmit: SubmitHandler<UserUpdateValues> = async (values) => {
     return updateUser(values)
@@ -62,25 +64,30 @@ const AccountSettings: FC = () => {
   }, [reset]);
 
   return (
-    <>
+    <Wrapper>
+      <Heading>アカウント編集</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <input type="text" name="name" ref={register} />
-          {errors.name && <p>{errors.name.message}</p>}
-        </div>
-        <div>
-          <input type="email" name="email" ref={register} />
-          {errors.email && <p>{errors.email.message}</p>}
-        </div>
-        <Button type="submit" disabled={isSubmitting || !isValid}>
-          更新
-        </Button>
-        <Button type="button" appearance="primary">
+        <Field label="ユーザ名" htmlFor="name" error={errors.name?.message}>
+          <Input id="name" name="name" inputRef={register} type="text" />
+        </Field>
+        <Field
+          label="メールアドレス"
+          htmlFor="email"
+          error={errors.email?.message}
+        >
+          <Input id="email" name="email" inputRef={register} type="email" />
+        </Field>
+        <Button
+          type="submit"
+          appearance="primary"
+          disabled={isSubmitting}
+          ripple={false}
+        >
           更新
         </Button>
       </form>
       {isLoading && <Loader backdrop />}
-    </>
+    </Wrapper>
   );
 };
 
@@ -92,3 +99,15 @@ const validationSchema = Yup.object().shape<UserUpdateValues>({
     .email(ValidationMessages.email)
     .required(ValidationMessages.required),
 });
+
+const Wrapper = styled.div`
+  padding: 20px;
+  max-width: 780px;
+  margin: auto;
+`;
+
+const Heading = styled.h1`
+  font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+`;
