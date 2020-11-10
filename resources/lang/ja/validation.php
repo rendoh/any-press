@@ -79,7 +79,7 @@ return [
     'max' => [
         'numeric' => 'The :attribute may not be greater than :max.',
         'file' => ':max キロバイト以下の :attribute をアップロードしてください ',
-        'string' => ':attribute は :min 文字以下で入力してください。',
+        'string' => ':attribute は :max 文字以下で入力してください。',
         'array' => 'The :attribute may not have more than :max items.',
     ],
     'mimes' => 'The :attribute must be a file of type: :values.',
@@ -148,6 +148,7 @@ return [
     */
 
     'attributes' => [
+        'name' => '名前',
         'email' => 'メールアドレス',
         'password' => 'パスワード',
         'file' => 'ファイル',
