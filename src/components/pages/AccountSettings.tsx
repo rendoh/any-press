@@ -1,70 +1,53 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
+import styled from '@emotion/styled';
+import { Alert, Button, Icon, IconButton, Input, Loader } from 'rsuite';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { ApiError } from '../../api/ApiError';
-import { updateUser, UserUpdateValues, fetchUserAccount } from '../../api/user';
-import { useSetAuthenticatedUser } from '../../hooks/recoil/auth';
-import { ErrorMessages, ValidationMessages } from '../../resources/messages';
-import { Alert, Button, Icon, IconButton, Input, Loader } from 'rsuite';
+import { UpdateUserValues } from '../../api/user';
+import { ValidationMessages } from '../../resources/messages';
 import Field from '../form/Field';
-import styled from '@emotion/styled';
 import AvatarUploader from '../form/AvatarUploader';
+import { useUserAccount } from '../../hooks/api/useUserAccount';
+import { useUpdateUser } from '../../hooks/api/useUpdateUser';
 
 const AccountSettings: FC = () => {
-  const setAuthenticatedUser = useSetAuthenticatedUser();
   const {
-    register,
     handleSubmit,
-    formState,
+    register,
+    watch,
+    setValue,
     errors,
     reset,
     setError,
-    watch,
-    setValue,
-  } = useForm<UserUpdateValues>({
+    formState: { isSubmitting },
+  } = useForm<UpdateUserValues>({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
   });
-  const { isSubmitting } = formState;
 
-  const onSubmit: SubmitHandler<UserUpdateValues> = async (values) => {
-    return updateUser(values)
-      .then(({ data }) => {
-        setAuthenticatedUser(data);
-        reset(data);
-        Alert.success('アカウント情報を更新しました');
-      })
-      .catch((error) => {
-        if (error instanceof ApiError) {
-          error.getFieldErrorMessages().forEach((message) => {
-            Alert.warning(message);
-          });
-          error
-            .getFieldErrorEntries(['name', 'email'])
-            .forEach(([key, message]) => {
-              setError(key, {
-                message,
-              });
-            });
-        }
+  const { updateUser } = useUpdateUser({
+    onSuccess(userAccount) {
+      reset(userAccount);
+      Alert.success('アカウント情報を更新しました');
+    },
+    onError(errors) {
+      errors.forEach(([key, message]) => {
+        setError(key, {
+          message,
+        });
       });
+    },
+  });
+
+  const onSubmit: SubmitHandler<UpdateUserValues> = async (values) => {
+    return updateUser(values);
   };
 
-  const [isLoading, setIsLoading] = useState(true);
+  const { userAccount, isLoading } = useUserAccount();
   useEffect(() => {
-    fetchUserAccount()
-      .then(({ data }) => {
-        // 初期状態をセット
-        reset(data);
-      })
-      .catch(() => {
-        Alert.warning(ErrorMessages.connection);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [reset]);
+    reset(userAccount);
+  }, [userAccount, reset]);
 
   useEffect(() => {
     register({ name: 'avatar' });
@@ -107,7 +90,7 @@ const AccountSettings: FC = () => {
         <Button
           type="submit"
           appearance="primary"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isLoading}
           ripple={false}
         >
           更新
@@ -120,7 +103,7 @@ const AccountSettings: FC = () => {
 
 export default AccountSettings;
 
-const validationSchema = Yup.object().shape<UserUpdateValues>({
+const validationSchema = Yup.object().shape<UpdateUserValues>({
   name: Yup.string().required(ValidationMessages.required),
   email: Yup.string()
     .email(ValidationMessages.email)

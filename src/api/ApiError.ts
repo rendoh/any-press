@@ -1,5 +1,7 @@
 import { ErrorFields } from '../types/error';
 
+export type ErrorEntry<T extends string = string> = [T, string];
+
 export class ApiError<E extends ErrorFields = ErrorFields> extends Error {
   public name = 'ApiError';
   constructor(message: string, public fields: E & ErrorFields) {
@@ -12,7 +14,7 @@ export class ApiError<E extends ErrorFields = ErrorFields> extends Error {
       .flatMap((fieldErrors) => fieldErrors);
   }
 
-  public getFieldErrorEntries<T extends string>(keys: T[]): [T, string][] {
+  public getFieldErrorEntries<T extends string>(keys: T[]): ErrorEntry<T>[] {
     return Object.entries(this.fields)
       .filter((field): field is [T, string | string[]] => {
         const [key, values] = field;

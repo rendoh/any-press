@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
-import React, { FC, useState } from 'react';
-import { Alert, Icon, Loader } from 'rsuite';
-import { ApiError } from '../../api/ApiError';
-import { uploadImage } from '../../api/upload';
+import React, { FC } from 'react';
+import { Icon, Loader } from 'rsuite';
+import { useUpload } from '../../hooks/api/useUpload';
 
 type AvatarUploaderProps = {
   image?: string;
@@ -14,29 +13,13 @@ type AvatarUploaderProps = {
 const AvatarUploader: FC<AvatarUploaderProps> = ({
   image,
   onSuccess,
-  onError,
   className,
 }) => {
-  const [isUploading, setIsUploading] = useState(false);
-  const upload = async (file: File) => {
-    setIsUploading(true);
-    try {
-      const { data } = await uploadImage(file);
-      onSuccess(data.file_path);
-      Alert.success('ファイルを送信しました');
-    } catch (error) {
-      if (error instanceof ApiError) {
-        error.getFieldErrorMessages().forEach((message) => {
-          Alert.error(message);
-        });
-      }
-      if (onError) {
-        onError();
-      }
-    } finally {
-      setIsUploading(false);
-    }
-  };
+  const { upload, isUploading } = useUpload({
+    onSuccess(filePath) {
+      onSuccess(filePath);
+    },
+  });
   return (
     <Wrapper className={className}>
       {isUploading && <Loader center backdrop />}

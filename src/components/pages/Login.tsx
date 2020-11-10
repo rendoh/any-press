@@ -1,52 +1,45 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
+import { Button, Input, Loader } from 'rsuite';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ValidationMessages } from '../../resources/messages';
-import { login, LoginValues } from '../../api/auth';
-import {
-  useIsAuthenticated,
-  useSetAuthenticatedUser,
-} from '../../hooks/recoil/auth';
+import { LoginValues } from '../../api/auth';
+import { useIsAuthenticated } from '../../hooks/recoil/auth';
 import { Paths } from '../../constants/paths';
-import { ApiError } from '../../api/ApiError';
-import { Alert, Button, Input, Loader } from 'rsuite';
 import Field from '../form/Field';
 import MinimalForm from '../form/MinimalForm';
+import { useLogin } from '../../hooks/api/useLogin';
 
 const Login: FC = () => {
-  const { register, handleSubmit, formState, errors, setError } = useForm<
-    LoginValues
-  >({
+  const {
+    register,
+    errors,
+    handleSubmit,
+    setError,
+    formState: { isSubmitting },
+  } = useForm<LoginValues>({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
   });
-  const { isSubmitting } = formState;
-  const setAuthenticatedUser = useSetAuthenticatedUser();
   const { redirect } = useRedirectToStatePath();
+  const { login } = useLogin({
+    onSuccess() {
+      redirect();
+    },
+    onError(errors) {
+      errors.forEach(([key, message]) => {
+        setError(key, {
+          message,
+        });
+      });
+    },
+  });
 
   const onSubmit: SubmitHandler<LoginValues> = async (values) => {
-    return login(values)
-      .then(({ data }) => {
-        setAuthenticatedUser(data);
-        redirect();
-      })
-      .catch((error) => {
-        if (error instanceof ApiError) {
-          error.getFieldErrorMessages().forEach((message) => {
-            Alert.warning(message);
-          });
-          error
-            .getFieldErrorEntries(['email', 'password'])
-            .forEach(([key, message]) => {
-              setError(key, {
-                message,
-              });
-            });
-        }
-      });
+    return login(values);
   };
 
   const isAuthenticated = useIsAuthenticated();

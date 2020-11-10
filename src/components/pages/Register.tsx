@@ -1,49 +1,40 @@
 import React, { FC } from 'react';
+import styled from '@emotion/styled';
+import { Button, Input, Loader } from 'rsuite';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { ApiError } from '../../api/ApiError';
-import { registerUser, UserRegistrationValues } from '../../api/user';
+import { RegisterUserValues } from '../../api/user';
 import { Paths } from '../../constants/paths';
-import {
-  useIsAuthenticated,
-  useSetAuthenticatedUser,
-} from '../../hooks/recoil/auth';
+import { useIsAuthenticated } from '../../hooks/recoil/auth';
 import { ValidationMessages } from '../../resources/messages';
-import styled from '@emotion/styled';
 import MinimalForm from '../form/MinimalForm';
 import Field from '../form/Field';
-import { Alert, Button, Input, Loader } from 'rsuite';
+import { useRegister } from '../../hooks/api/useRegister';
 
 const Register: FC = () => {
-  const setAuthenticatedUser = useSetAuthenticatedUser();
-  const { handleSubmit, register, errors, setError, formState } = useForm<
-    UserRegistrationValues
-  >({
+  const {
+    handleSubmit,
+    errors,
+    register,
+    setError,
+    formState: { isSubmitting },
+  } = useForm<RegisterUserValues>({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
   });
-  const { isSubmitting } = formState;
-  const onSubmit: SubmitHandler<UserRegistrationValues> = async (values) => {
-    return registerUser(values)
-      .then(({ data }) => {
-        setAuthenticatedUser(data);
-      })
-      .catch((error) => {
-        if (error instanceof ApiError) {
-          error.getFieldErrorMessages().forEach((message) => {
-            Alert.warning(message);
-          });
-          error
-            .getFieldErrorEntries(['email', 'password'])
-            .forEach(([key, message]) => {
-              setError(key, {
-                message,
-              });
-            });
-        }
+  const { register: registerUser } = useRegister({
+    onError(errors) {
+      errors.forEach(([key, message]) => {
+        setError(key, {
+          message,
+        });
       });
+    },
+  });
+  const onSubmit: SubmitHandler<RegisterUserValues> = async (values) => {
+    return registerUser(values);
   };
 
   const isAuthenticated = useIsAuthenticated();
@@ -108,7 +99,7 @@ const Register: FC = () => {
 
 export default Register;
 
-const validationSchema = Yup.object().shape<UserRegistrationValues>({
+const validationSchema = Yup.object().shape<RegisterUserValues>({
   name: Yup.string().required(ValidationMessages.required),
   email: Yup.string()
     .email(ValidationMessages.email)
@@ -118,8 +109,6 @@ const validationSchema = Yup.object().shape<UserRegistrationValues>({
     .oneOf([Yup.ref('password')], ValidationMessages.passwordConfirmation)
     .required(ValidationMessages.required),
 });
-
-const Completed = styled.div``;
 
 const FormFooter = styled.div`
   margin-top: 20px;
