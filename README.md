@@ -2,6 +2,15 @@
 
 Laravel sandbox project with React.
 
+## Laravel
+
+### setup
+
+```bash
+$ php artisan migrate
+$ php artisan db:seed --class=FakeDataSeeder
+```
+
 ## 認証
 
 [Laravel Sanctum](https://laravel.com/docs/8.x/sanctum)を使用する。

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\Article;
 
 class DeleteImages extends Command
 {
@@ -42,7 +43,9 @@ class DeleteImages extends Command
         $images = Storage::files('public/uploads');
         foreach ($images as $image) {
             $fileName = basename($image);
-            $isUsed = User::where('avatar', 'like', "%$fileName%")->exists();
+            $isUsed =
+                User::where('avatar', 'like', "%$fileName%")->exists() ||
+                Article::where('image', 'like', "%$fileName%")->exists();
             if (!$isUsed) {
                 Storage::delete($image);
             }
