@@ -2,13 +2,14 @@ import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { logout } from '../api/auth';
-import { Avatar, Dropdown, Icon, Nav, Navbar } from 'rsuite';
+import { Dropdown, Icon, Nav, Navbar } from 'rsuite';
 
 import {
   useAuthenticatedUser,
   useSetAuthenticatedUser,
 } from '../hooks/recoil/auth';
 import { Paths } from '../constants/paths';
+import Avatar from './core/Avatar';
 
 const Header: FC = () => {
   const authenticatedUser = useAuthenticatedUser();
@@ -29,17 +30,7 @@ const Header: FC = () => {
             <AvatarDropdown
               title={
                 <AvatarRow>
-                  {authenticatedUser.avatar ? (
-                    <AvatarRowImage
-                      circle
-                      src={authenticatedUser.avatar}
-                      alt=""
-                    />
-                  ) : (
-                    <AvatarRowImage circle alt="">
-                      <Icon icon="user" />
-                    </AvatarRowImage>
-                  )}
+                  <AvatarRowImage avatar={authenticatedUser.avatar} />
                   {authenticatedUser.name}
                 </AvatarRow>
               }
