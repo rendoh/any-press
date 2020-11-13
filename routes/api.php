@@ -6,6 +6,8 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ImageController;
 use App\Http\Controllers\API\ArticleController;
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,8 @@ Route::prefix('v1')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('articles', [ArticleController::class, 'index']);
     Route::get('articles/{id}', [ArticleController::class, 'show']);
+    Route::get('categories', [CategoryController::class, 'index']);
+    Route::get('tags', [TagController::class, 'index']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('user', [UserController::class, 'account']);
