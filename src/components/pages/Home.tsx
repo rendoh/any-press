@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
 import React, { FC, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Loader, Pagination } from 'rsuite';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Icon, IconButton, Loader, Pagination } from 'rsuite';
+import { Paths } from '../../constants/paths';
 import { useArticles } from '../../hooks/api/useArticles';
+import { useIsAuthenticated } from '../../hooks/recoil/auth';
 import ArticleList from '../article/ArticleList';
 
 const Home: FC = () => {
@@ -32,6 +34,8 @@ const Home: FC = () => {
     };
   }, []);
 
+  const isAuthenticated = useIsAuthenticated();
+
   return isLoading ? (
     <Loader center />
   ) : (
@@ -50,6 +54,17 @@ const Home: FC = () => {
           size={paginationSize}
         />
       </PaginationWrapper>
+      {isAuthenticated && (
+        <FloatingButton
+          appearance="primary"
+          icon={<Icon icon="plus" />}
+          circle
+          size="lg"
+          aria-label="記事を作成する"
+          componentClass={Link}
+          to={Paths.articleCreate}
+        />
+      )}
     </Container>
   );
 };
@@ -63,4 +78,10 @@ const Container = styled.div`
 const PaginationWrapper = styled.div`
   text-align: center;
   margin-top: 20px;
+`;
+
+const FloatingButton = styled(IconButton)`
+  position: fixed !important;
+  bottom: 20px;
+  right: 20px;
 `;

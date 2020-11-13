@@ -6,10 +6,17 @@ type FieldProps = {
   label?: string;
   htmlFor?: string;
   error?: string;
+  className?: string;
 };
 
-const Field: FC<FieldProps> = ({ label, htmlFor, error, children }) => (
-  <Wrapper>
+const Field: FC<FieldProps> = ({
+  label,
+  htmlFor,
+  error,
+  className,
+  children,
+}) => (
+  <Wrapper className={className}>
     {label && (
       <LabelWrapper>
         <Label htmlFor={htmlFor}>{label}</Label>

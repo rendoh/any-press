@@ -1,19 +1,24 @@
 import styled from '@emotion/styled';
 import React, { FC } from 'react';
 import { Icon, Loader } from 'rsuite';
+import { IconNames } from 'rsuite/lib/Icon';
 import { useUpload } from '../../hooks/api/useUpload';
 
-type AvatarUploaderProps = {
+type ImageUploaderProps = {
   image?: string;
   onSuccess: (filePath: string) => void;
   onError?: () => void;
   className?: string;
+  icon?: IconNames;
+  name?: string;
 };
 
-const AvatarUploader: FC<AvatarUploaderProps> = ({
+const ImageUploader: FC<ImageUploaderProps> = ({
   image,
   onSuccess,
   className,
+  name,
+  icon = 'image',
 }) => {
   const { upload, isUploading } = useUpload({
     onSuccess(filePath) {
@@ -24,6 +29,7 @@ const AvatarUploader: FC<AvatarUploaderProps> = ({
     <Wrapper className={className}>
       {isUploading && <Loader center backdrop />}
       <FileField
+        name={name}
         type="file"
         onChange={(e) => {
           if (e.target.files?.length) {
@@ -33,12 +39,12 @@ const AvatarUploader: FC<AvatarUploaderProps> = ({
           }
         }}
       />
-      {image ? <Preview src={image} alt="" /> : <Icon icon="user" size="5x" />}
+      {image ? <Preview src={image} alt="" /> : <Icon icon={icon} size="5x" />}
     </Wrapper>
   );
 };
 
-export default AvatarUploader;
+export default ImageUploader;
 
 const Wrapper = styled.span`
   position: relative;
@@ -62,7 +68,8 @@ const FileField = styled.input`
 `;
 
 const Preview = styled.img`
-  object-fit: cover;
+  object-fit: contain;
   width: 100%;
   height: 100%;
+  background: #ccc;
 `;

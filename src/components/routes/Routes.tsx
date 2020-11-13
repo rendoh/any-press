@@ -9,6 +9,9 @@ const Home = React.lazy(() => import('../pages/Home'));
 const ArticleDetailPage = React.lazy(
   () => import('../pages/ArticleDetailPage'),
 );
+const ArticleCreatePage = React.lazy(
+  () => import('../pages/ArticleCreatePage'),
+);
 const Login = React.lazy(() => import('../pages/Login'));
 const Register = React.lazy(() => import('../pages/Register'));
 const AccountSettings = React.lazy(() => import('../pages/AccountSettings'));
@@ -41,6 +44,10 @@ const privateRoutes: PartialRouteObject[] = [
   {
     path: Paths.accountSettings,
     element: <AccountSettings />,
+  },
+  {
+    path: Paths.articleCreate,
+    element: <ArticleCreatePage />,
   },
 ];
 

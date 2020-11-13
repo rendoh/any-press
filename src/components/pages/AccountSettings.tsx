@@ -7,9 +7,9 @@ import * as Yup from 'yup';
 import { UpdateUserValues } from '../../api/user';
 import { ValidationMessages } from '../../resources/messages';
 import Field from '../form/Field';
-import AvatarUploader from '../form/AvatarUploader';
 import { useUserAccount } from '../../hooks/api/useUserAccount';
 import { useUpdateUser } from '../../hooks/api/useUpdateUser';
+import ImageUploader from '../form/ImageUploader';
 
 const AccountSettings: FC = () => {
   const {
@@ -59,13 +59,15 @@ const AccountSettings: FC = () => {
     <Wrapper>
       <Heading>アカウント編集</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Field label="アバター">
+        <Field label="アバター" htmlFor="avatar">
           <UploaderWrapper>
-            <Uploader
+            <AvatarUploader
+              name="avatar"
               image={avatar}
               onSuccess={(filePath) => {
                 setValue('avatar', filePath);
               }}
+              icon="user"
             />
             {avatar && (
               <RemoveButton
@@ -96,7 +98,7 @@ const AccountSettings: FC = () => {
           更新
         </Button>
       </form>
-      {isLoading && <Loader backdrop />}
+      {(isLoading || isSubmitting) && <Loader backdrop />}
     </Wrapper>
   );
 };
@@ -129,7 +131,7 @@ const UploaderWrapper = styled.div`
   position: relative;
 `;
 
-const Uploader = styled(AvatarUploader)`
+const AvatarUploader = styled(ImageUploader)`
   width: ${uploaderSize}px;
   height: ${uploaderSize}px;
 `;
