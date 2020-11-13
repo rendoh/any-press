@@ -5,7 +5,7 @@ import { handleApiError } from '../../utils/handleApiError';
 
 export function useArticles({ page }: ArticlesParams = {}) {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [perPage, setPerPage] = useState(0);
   const [total, setTotal] = useState(0);
 

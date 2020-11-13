@@ -4,7 +4,11 @@ export type ErrorEntry<T extends string = string> = [T, string];
 
 export class ApiError<E extends ErrorFields = ErrorFields> extends Error {
   public name = 'ApiError';
-  constructor(message: string, public fields: E & ErrorFields) {
+  constructor(
+    message: string,
+    private fields: E & ErrorFields,
+    public status: number,
+  ) {
     super(message);
   }
 

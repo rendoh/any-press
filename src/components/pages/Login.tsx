@@ -44,7 +44,7 @@ const Login: FC = () => {
 
   const isAuthenticated = useIsAuthenticated();
   if (isAuthenticated) {
-    return <Navigate to={Paths.home} />;
+    return <Navigate to={Paths.home} replace />;
   }
 
   return (

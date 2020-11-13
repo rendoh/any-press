@@ -2,9 +2,11 @@ import React, { FC } from 'react';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { Icon, Panel, Tag, Tooltip, Whisper } from 'rsuite';
-import { format, parseISO } from 'date-fns';
 import { Article } from '../../types/article';
 import Avatar from '../core/Avatar';
+import { formatISOString } from '../../utils/formatters';
+import { Link } from 'react-router-dom';
+import { Paths } from '../../constants/paths';
 
 type ArticleCardProps = {
   article: Article;
@@ -13,16 +15,22 @@ type ArticleCardProps = {
 
 const ArticleCard: FC<ArticleCardProps> = ({
   className,
-  article: { title, excerpt, image, created_at, category, tags, user },
+  article: { id, title, excerpt, image, created_at, category, tags, user },
 }) => (
-  <Wrapper header={title} bordered className={className}>
-    {image ? (
-      <Image src={image} alt="" />
-    ) : (
-      <PlaceholderImage>
-        <ImageIcon icon="image" />
-      </PlaceholderImage>
-    )}
+  <Wrapper
+    header={<Link to={Paths.articleDetail(id)}>{title}</Link>}
+    bordered
+    className={className}
+  >
+    <ImageLink to={Paths.articleDetail(id)}>
+      {image ? (
+        <Image src={image} alt="" />
+      ) : (
+        <PlaceholderImage>
+          <ImageIcon icon="image" />
+        </PlaceholderImage>
+      )}
+    </ImageLink>
     <CreatedAt>{formatISOString(created_at)}</CreatedAt>
     <Paragraph>{excerpt}</Paragraph>
     <Categories>
@@ -44,11 +52,6 @@ const ArticleCard: FC<ArticleCardProps> = ({
 );
 
 export default ArticleCard;
-
-const formatISOString = (isoString: string): string => {
-  const date = parseISO(isoString);
-  return format(date, 'yyyy年M月d日');
-};
 
 const verticalImageHeight = 200;
 
@@ -123,4 +126,8 @@ const AvatarTrigger = styled.div`
   background: none;
   border: none;
   padding: 0;
+`;
+
+const ImageLink = styled(Link)`
+  display: block;
 `;

@@ -2,19 +2,26 @@ import React, { FC } from 'react';
 import { PartialRouteObject } from 'react-router';
 import { useRoutes } from 'react-router-dom';
 import { Paths } from '../../constants/paths';
-import Home from '../pages/Home';
 import AsyncRoute from './AsyncRoute';
 import PrivateRoute from './PrivateRoute';
 
+const Home = React.lazy(() => import('../pages/Home'));
+const ArticleDetailPage = React.lazy(
+  () => import('../pages/ArticleDetailPage'),
+);
 const Login = React.lazy(() => import('../pages/Login'));
 const Register = React.lazy(() => import('../pages/Register'));
 const AccountSettings = React.lazy(() => import('../pages/AccountSettings'));
-const NotFound = React.lazy(() => import('../pages/NotFound'));
+const NotFoundPage = React.lazy(() => import('../pages/NotFoundPage'));
 
 const publicRoutes: PartialRouteObject[] = [
   {
     path: Paths.home,
     element: <Home />,
+  },
+  {
+    path: Paths.articleDetail(':id'),
+    element: <ArticleDetailPage />,
   },
   {
     path: Paths.login,
@@ -26,7 +33,7 @@ const publicRoutes: PartialRouteObject[] = [
   },
   {
     path: '*',
-    element: <NotFound />,
+    element: <NotFoundPage />,
   },
 ];
 

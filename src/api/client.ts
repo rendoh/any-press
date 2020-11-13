@@ -15,10 +15,12 @@ export const apiClient = axios.create({
 apiClient.interceptors.response.use(undefined, (e: unknown) => {
   let message = 'エラーが発生しました';
   let fields: ErrorFields = {};
+  let status = 0;
   if (e instanceof Error && 'isAxiosError' in e) {
     const error: AxiosError<ErrorResponse> = e;
     message = error.response?.data.message ?? message;
     fields = error.response?.data.errors ?? fields;
+    status = error.response?.status ?? status;
   }
-  throw new ApiError(message, fields);
+  throw new ApiError(message, fields, status);
 });

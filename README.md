@@ -35,3 +35,5 @@ $ npm run prod # build
 
 - [ ] SESSION_LIFETIME 401, 419
 - [ ] remember token
+- [ ] Helmet
+- [ ] OGP
