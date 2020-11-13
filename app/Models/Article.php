@@ -36,6 +36,15 @@ class Article extends Model
         'html',
     ];
 
+    protected $fillable = [
+        'title',
+        'image',
+        'content',
+        'public',
+        'user_id',
+        'category_id',
+    ];
+
     public function getExcerptAttribute()
     {
         $result = strip_tags($this->content);

@@ -3,35 +3,34 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreArticleRequest;
 use App\Services\ArticleService;
 
 class ArticleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(ArticleService $articlerService)
+    private ArticleService $articlerService;
+
+    public function __construct(ArticleService $articlerService)
     {
-        return $articlerService->paginate();
+        $this->articlerService = $articlerService;
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-
-    public function show(ArticleService $articlerService, $id)
+    public function index()
     {
-        return $articlerService->getDetail($id);
+        return $this->articlerService->paginate();
+    }
+
+    public function store(StoreArticleRequest $request)
+    {
+        $user = auth()->user();
+        $article = $this->articlerService->create($user, $request->validated());
+
+        return response()->json($article, 201);
+    }
+
+    public function show($id)
+    {
+        return $this->articlerService->getDetail($id);
     }
 
     // /**

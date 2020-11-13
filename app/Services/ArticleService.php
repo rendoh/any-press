@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Article;
+use App\Models\User;
 
 class ArticleService
 {
@@ -23,5 +24,14 @@ class ArticleService
             ])
             ->firstOrFail()
             ->append(['html']);
+    }
+
+    public function create(User $user, array $data): Article
+    {
+        $data = array_merge($data, ['user_id' => $user->id]);
+        $article = Article::create($data);
+        $article->tags()->attach($data['tags']);
+
+        return $article;
     }
 }

@@ -29,5 +29,6 @@ Route::prefix('v1')->group(function () {
         Route::get('user', [UserController::class, 'account']);
         Route::put('user', [UserController::class, 'update']);
         Route::post('upload', ImageController::class);
+        Route::post('articles', [ArticleController::class, 'store']);
     });
 });
