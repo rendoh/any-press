@@ -28,7 +28,6 @@ class StoreArticleRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'image' => ['nullable', 'string'],
             'content' => ['required', 'string'],
-            'public' => ['required', 'boolean'],
             'category_id' => ['required', 'exists:categories,id'],
             'tags' => ['exists:tags,id'],
         ];
