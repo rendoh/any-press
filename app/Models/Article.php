@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use \Illuminate\Support\Str;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
 class Article extends Model
 {
@@ -24,7 +26,6 @@ class Article extends Model
         'id',
         'title',
         'image',
-        'content',
         'public',
         'user',
         'category',
@@ -32,11 +33,21 @@ class Article extends Model
         'created_at',
         'updated_at',
         'excerpt',
+        'html',
     ];
 
     public function getExcerptAttribute()
     {
-        return Str::limit($this->content, self::EXCERPT_LENGTH, '...');
+        $result = strip_tags($this->content);
+        return Str::limit($result, self::EXCERPT_LENGTH, '...');
+    }
+
+    public function getHtmlAttribute()
+    {
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        $clean_html = $purifier->purify($this->content);
+        return $clean_html;
     }
 
     public function user()

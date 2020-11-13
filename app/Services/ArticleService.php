@@ -13,4 +13,15 @@ class ArticleService
             ->latest()
             ->paginate(10);
     }
+
+    public function getDetail($id)
+    {
+        return Article::with(['user', 'category', 'tags'])
+            ->where([
+                'id' => $id,
+                'public' => true,
+            ])
+            ->firstOrFail()
+            ->append(['html']);
+    }
 }

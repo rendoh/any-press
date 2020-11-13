@@ -29,16 +29,10 @@ class ArticleController extends Controller
     //     //
     // }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show($id)
-    // {
-    //     //
-    // }
+    public function show(ArticleService $articlerService, $id)
+    {
+        return $articlerService->getDetail($id);
+    }
 
     // /**
     //  * Update the specified resource in storage.
