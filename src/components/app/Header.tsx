@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
-import { logout } from '../api/auth';
-import { Dropdown, Icon, Nav, Navbar } from 'rsuite';
+import { logout } from '../../api/auth';
+import { Dropdown, Nav, Navbar } from 'rsuite';
 
 import {
   useAuthenticatedUser,
   useSetAuthenticatedUser,
-} from '../hooks/recoil/auth';
-import { Paths } from '../constants/paths';
-import Avatar from './core/Avatar';
+} from '../../hooks/recoil/auth';
+import { Paths } from '../../constants/paths';
+import Avatar from '../core/Avatar';
 
 const Header: FC = () => {
   const authenticatedUser = useAuthenticatedUser();
