@@ -40,17 +40,21 @@ class DeleteImages extends Command
      */
     public function handle()
     {
+        $count = 0;
         $images = Storage::files('public/uploads');
         foreach ($images as $image) {
             $fileName = basename($image);
             $isUsed =
                 User::where('avatar', 'like', "%$fileName%")->exists() ||
-                Article::where('image', 'like', "%$fileName%")->exists();
+                Article::where('image', 'like', "%$fileName%")->exists() ||
+                Article::where('content', 'like', "%$fileName%")->exists();
             if (!$isUsed) {
                 Storage::delete($image);
+                $count++;
             }
         }
 
+        echo "$count images have been deleted.";
         return 0;
     }
 }
