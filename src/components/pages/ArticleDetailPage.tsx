@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { useParams } from 'react-router-dom';
-import { Loader, Tag } from 'rsuite';
+import { Tag } from 'rsuite';
 import { useArticleDetail } from '../../hooks/api/useArticleDetail';
 import { formatISOString } from '../../utils/formatters';
 import Avatar from '../core/Avatar';
 import NotFound from '../core/NotFound';
 import { css } from '@emotion/core';
+import OverlayLoader from '../core/OverlayLoader';
 
 const ArticleDetailPage: FC = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const ArticleDetailPage: FC = () => {
   const { articleDetail: article, isLoading } = useArticleDetail(Number(id));
 
   if (isLoading) {
-    return <Loader center />;
+    return <OverlayLoader backdrop={false} />;
   }
   if (!article) {
     return <NotFound />;

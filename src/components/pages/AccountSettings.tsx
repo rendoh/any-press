@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Alert, Button, Icon, IconButton, Input, Loader } from 'rsuite';
+import { Alert, Button, Icon, IconButton, Input } from 'rsuite';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -10,6 +10,7 @@ import Field from '../form/Field';
 import { useUserAccount } from '../../hooks/api/useUserAccount';
 import { useUpdateUser } from '../../hooks/api/useUpdateUser';
 import ImageUploader from '../form/ImageUploader';
+import OverlayLoader from '../core/OverlayLoader';
 
 const AccountSettings: FC = () => {
   const {
@@ -98,7 +99,7 @@ const AccountSettings: FC = () => {
           更新
         </Button>
       </form>
-      {(isLoading || isSubmitting) && <Loader backdrop />}
+      {(isLoading || isSubmitting) && <OverlayLoader />}
     </Wrapper>
   );
 };

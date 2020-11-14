@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import React, { FC } from 'react';
-import { Icon, Loader } from 'rsuite';
+import { Icon } from 'rsuite';
 import { IconNames } from 'rsuite/lib/Icon';
 import { useUpload } from '../../hooks/api/useUpload';
+import OverlayLoader from '../core/OverlayLoader';
 
 type ImageUploaderProps = {
   image?: string;
@@ -27,7 +28,7 @@ const ImageUploader: FC<ImageUploaderProps> = ({
   });
   return (
     <Wrapper className={className}>
-      {isUploading && <Loader center backdrop />}
+      {isUploading && <OverlayLoader />}
       <FileField
         name={name}
         type="file"

@@ -7,8 +7,8 @@ import 'tinymce/plugins/image';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/link';
 import { useUpload } from '../../hooks/api/useUpload';
-import { Loader } from 'rsuite';
 import { css, Global } from '@emotion/core';
+import OverlayLoader from '../core/OverlayLoader';
 
 require.context(
   '!file-loader?name=assets/[path][name].[ext]&context=node_modules/tinymce!tinymce/skins',
@@ -55,7 +55,7 @@ const WysiwygEditor: FC<WysiwygEditorProps> = ({ value, onChange }) => {
         }}
         onEditorChange={onChange}
       />
-      {isUploading && <Loader backdrop />}
+      {isUploading && <OverlayLoader />}
       <Global styles={globalStyle} />
     </>
   );

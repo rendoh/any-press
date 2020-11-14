@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 import React, { FC, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Icon, IconButton, Loader, Pagination } from 'rsuite';
+import { Icon, IconButton, Pagination } from 'rsuite';
 import { Paths } from '../../constants/paths';
 import { useArticles } from '../../hooks/api/useArticles';
 import { useIsAuthenticated } from '../../hooks/recoil/auth';
 import ArticleList from '../article/ArticleList';
+import OverlayLoader from '../core/OverlayLoader';
 
 const Home: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -63,7 +64,7 @@ const Home: FC = () => {
           to={Paths.articleCreate}
         />
       )}
-      {isLoading && <Loader backdrop />}
+      {isLoading && <OverlayLoader backdrop={false} />}
     </Container>
   );
 };

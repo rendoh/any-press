@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
-import { Button, Input, Loader } from 'rsuite';
+import { Button, Input } from 'rsuite';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,6 +12,7 @@ import { ValidationMessages } from '../../resources/messages';
 import MinimalForm from '../form/MinimalForm';
 import Field from '../form/Field';
 import { useRegister } from '../../hooks/api/useRegister';
+import OverlayLoader from '../core/OverlayLoader';
 
 const Register: FC = () => {
   const {
@@ -92,7 +93,7 @@ const Register: FC = () => {
           <Link to={Paths.login}>ログイン</Link>
         </FormFooter>
       </MinimalForm>
-      {isSubmitting && <Loader backdrop />}
+      {isSubmitting && <OverlayLoader />}
     </>
   );
 };

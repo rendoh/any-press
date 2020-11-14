@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Button, Input, Loader } from 'rsuite';
+import { Button, Input } from 'rsuite';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ArticleValues } from '../../api/article';
@@ -14,6 +14,7 @@ import { Paths } from '../../constants/paths';
 import ImageUploader from '../form/ImageUploader';
 import { ValidationMessages } from '../../resources/messages';
 import WysiwygEditor from '../form/WysiwygEditor';
+import OverlayLoader from '../core/OverlayLoader';
 
 const ArticleCreatePage: FC = () => {
   const {
@@ -129,7 +130,7 @@ const ArticleCreatePage: FC = () => {
           送信
         </Button>
       </form>
-      {isSubmitting && <Loader backdrop />}
+      {isSubmitting && <OverlayLoader />}
     </Wrapper>
   );
 };
