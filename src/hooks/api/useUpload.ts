@@ -11,10 +11,12 @@ type UploadOption = {
 export function useUpload({ onSuccess, onError }: UploadOption = {}) {
   const [isUploading, setIsUploading] = useState(false);
   const handleUpload = async (file: File) => {
+    let filePath: string | null = null;
     setIsUploading(true);
     try {
       const { data } = await uploadImage(file);
       if (onSuccess) onSuccess(data.file_path);
+      filePath = data.file_path;
     } catch (error: unknown) {
       handleApiError(error);
       if (onError && error instanceof ApiError) {
@@ -23,6 +25,7 @@ export function useUpload({ onSuccess, onError }: UploadOption = {}) {
     } finally {
       setIsUploading(false);
     }
+    return filePath;
   };
 
   return {

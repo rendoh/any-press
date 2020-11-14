@@ -42,7 +42,7 @@ const ArticleDetailPage: FC = () => {
       {article.image && <MainVisual src={article.image} alt="" />}
       <Content
         dangerouslySetInnerHTML={{
-          __html: article.html,
+          __html: article.content,
         }}
       />
     </Root>

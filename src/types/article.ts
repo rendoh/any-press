@@ -26,5 +26,5 @@ export type Article = {
 };
 
 export type ArticleDetail = Article & {
-  html: string;
+  content: string;
 };

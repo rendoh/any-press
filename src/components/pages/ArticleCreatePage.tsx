@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import React, { FC, useEffect } from 'react';
+import styled from '@emotion/styled';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button, Input, Loader } from 'rsuite';
 import * as Yup from 'yup';
@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../constants/paths';
 import ImageUploader from '../form/ImageUploader';
 import { ValidationMessages } from '../../resources/messages';
+import WysiwygEditor from '../form/WysiwygEditor';
 
 const ArticleCreatePage: FC = () => {
   const {
@@ -30,10 +31,16 @@ const ArticleCreatePage: FC = () => {
       tags: [],
     },
   });
+
+  const selectedCategoryId = watch('category_id');
+  const selectedTagIds = watch('tags');
+  const image = watch('image');
+  const content = watch('content');
   useEffect(() => {
     register({ name: 'tags' });
     register({ name: 'category_id' });
     register({ name: 'image' });
+    register({ name: 'content' });
   }, [register]);
 
   const navigate = useNavigate();
@@ -58,10 +65,6 @@ const ArticleCreatePage: FC = () => {
   const onSubmit: SubmitHandler<ArticleValues> = async (values) => {
     return createArticle(values);
   };
-
-  const selectedCategoryId = watch('category_id');
-  const selectedTagIds = watch('tags');
-  const image = watch('image');
 
   return (
     <Wrapper>
@@ -112,7 +115,10 @@ const ArticleCreatePage: FC = () => {
           htmlFor="content"
           error={errors.content?.message}
         >
-          <Input id="content" name="content" inputRef={register} type="text" />
+          <WysiwygEditor
+            value={content}
+            onChange={(value) => setValue('content', value)}
+          />
         </Field>
         <Button
           type="submit"
