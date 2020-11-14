@@ -68,7 +68,7 @@ const ArticleCreatePage: FC = () => {
   };
 
   return (
-    <Wrapper>
+    <>
       <Heading>新規記事作成</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Field label="タイトル" htmlFor="title" error={errors.title?.message}>
@@ -131,7 +131,7 @@ const ArticleCreatePage: FC = () => {
         </Button>
       </form>
       {isSubmitting && <OverlayLoader />}
-    </Wrapper>
+    </>
   );
 };
 
@@ -142,12 +142,6 @@ const validationSchema = Yup.object().shape<ArticleValues>({
   content: Yup.string().required(ValidationMessages.required),
   category_id: Yup.number().required(ValidationMessages.required),
 });
-
-const Wrapper = styled.div`
-  padding: 20px;
-  max-width: 780px;
-  margin: auto;
-`;
 
 const Heading = styled.h1`
   font-size: 20px;

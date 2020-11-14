@@ -35,7 +35,7 @@ const Home: FC = () => {
   }, []);
 
   return (
-    <Container>
+    <>
       <ArticleList articles={articles} />
       <PaginationWrapper>
         <Pagination
@@ -51,15 +51,11 @@ const Home: FC = () => {
         />
       </PaginationWrapper>
       {isLoading && <OverlayLoader backdrop={false} />}
-    </Container>
+    </>
   );
 };
 
 export default Home;
-
-const Container = styled.div`
-  padding: 20px;
-`;
 
 const PaginationWrapper = styled.div`
   text-align: center;
