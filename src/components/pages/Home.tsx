@@ -36,9 +36,7 @@ const Home: FC = () => {
 
   const isAuthenticated = useIsAuthenticated();
 
-  return isLoading ? (
-    <Loader center />
-  ) : (
+  return (
     <Container>
       <ArticleList articles={articles} />
       <PaginationWrapper>
@@ -65,6 +63,7 @@ const Home: FC = () => {
           to={Paths.articleCreate}
         />
       )}
+      {isLoading && <Loader backdrop />}
     </Container>
   );
 };

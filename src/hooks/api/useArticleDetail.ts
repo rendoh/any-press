@@ -1,6 +1,4 @@
-import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
-import { ApiError } from '../../api/ApiError';
 import { fetchArticleDetail } from '../../api/article';
 import { ArticleDetail } from '../../types/article';
 import { handleApiError } from '../../utils/handleApiError';

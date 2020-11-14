@@ -10,6 +10,7 @@ export function useArticles({ page }: ArticlesParams = {}) {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
+    setIsLoading(true);
     fetchArticles({ page })
       .then(({ data }) => {
         setArticles(data.data);

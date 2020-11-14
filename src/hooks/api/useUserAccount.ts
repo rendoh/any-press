@@ -8,6 +8,7 @@ export function useUserAccount() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     fetchUserAccount()
       .then(({ data }) => {
         setUserAccount(data);
