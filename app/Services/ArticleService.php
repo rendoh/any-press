@@ -23,7 +23,7 @@ class ArticleService
                 'public' => true,
             ])
             ->firstOrFail()
-            ->append(['html']);
+            ->makeVisible(['content']);
     }
 
     public function create(User $user, array $data): Article

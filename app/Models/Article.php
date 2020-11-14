@@ -33,7 +33,6 @@ class Article extends Model
         'created_at',
         'updated_at',
         'excerpt',
-        'html',
     ];
 
     protected $fillable = [
@@ -51,12 +50,12 @@ class Article extends Model
         return Str::limit($result, self::EXCERPT_LENGTH, '...');
     }
 
-    public function getHtmlAttribute()
+    public function setContentAttribute($value)
     {
         $config = HTMLPurifier_Config::createDefault();
         $purifier = new HTMLPurifier($config);
-        $clean_html = $purifier->purify($this->content);
-        return $clean_html;
+        $clean_html = $purifier->purify($value);
+        $this->attributes['content'] = $clean_html;
     }
 
     public function user()
