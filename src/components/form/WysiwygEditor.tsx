@@ -38,6 +38,7 @@ const WysiwygEditor: FC<WysiwygEditorProps> = ({ value, onChange }) => {
           toolbar:
             'formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link | image',
           file_picker_types: 'image',
+          convert_urls: false,
           file_picker_callback: function (callback) {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
