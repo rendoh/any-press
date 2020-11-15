@@ -35,15 +35,13 @@ class ArticleService
             ->asPagination();
     }
 
-    public function getDetail($id)
+    public function paginateMyArticles(User $user)
     {
-        return Article::withRelations()
-            ->where([
-                'id' => $id,
-                'public' => true,
-            ])
-            ->firstOrFail()
-            ->makeVisible(['content']);
+        return $user
+            ->articles()
+            ->withRelations()
+            ->latest()
+            ->paginate(10);
     }
 
     public function create(User $user, array $data): Article

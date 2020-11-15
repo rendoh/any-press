@@ -1,7 +1,7 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC } from 'react';
 import styled from '@emotion/styled';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Modal, Tag } from 'rsuite';
+import { Link, useParams } from 'react-router-dom';
+import { Button, Tag } from 'rsuite';
 import { useArticleDetail } from '../../hooks/api/useArticleDetail';
 import { formatISOString } from '../../utils/formatters';
 import Avatar from '../core/Avatar';
@@ -11,28 +11,12 @@ import { Paths } from '../../constants/paths';
 import { useAuthenticatedUser } from '../../hooks/recoil/auth';
 import SEO from '../core/SEO';
 import ArticleHtmlContent from '../article/ArticleHtmlContent';
-import { css } from '@emotion/core';
-import { useDeleteArticle } from '../../hooks/api/useDeleteArticle';
 import PageTitle from '../core/PageTitle';
 
 const ArticleDetailPage: FC = () => {
   const { id } = useParams();
   const { articleDetail: article, isLoading } = useArticleDetail(Number(id));
   const authenticateduser = useAuthenticatedUser();
-  const [isDeleteModalActive, setIsDeleteModalActive] = useState(false);
-  const openDeleteModal = useCallback(() => {
-    setIsDeleteModalActive(true);
-  }, []);
-  const closeDeleteModal = useCallback(() => {
-    setIsDeleteModalActive(false);
-  }, []);
-
-  const navigate = useNavigate();
-  const { deleteArticle, isSubmitting } = useDeleteArticle({
-    onSuccess() {
-      navigate(Paths.home);
-    },
-  });
 
   if (isLoading) {
     return <OverlayLoader backdrop={false} />;
@@ -53,37 +37,12 @@ const ArticleDetailPage: FC = () => {
         <TitleRow>
           <PageTitle>{article.title}</PageTitle>
           {authenticateduser?.id === article.user.id && (
-            <ButtonGroup>
-              <Button componentClass={Link} to={Paths.articleEdit(article.id)}>
-                編集
-              </Button>
-              <Button onClick={openDeleteModal}>削除</Button>
-              <DeleteModal
-                show={isDeleteModalActive}
-                onHide={closeDeleteModal}
-                size="xs"
-                overflow
-              >
-                <Modal.Header>
-                  <Modal.Title>記事を削除しますか？</Modal.Title>
-                </Modal.Header>
-                <ModalFooter
-                  css={css`
-                    margin-top: 10px;
-                  `}
-                >
-                  <Button
-                    onClick={() => deleteArticle(article.id)}
-                    appearance="primary"
-                  >
-                    削除
-                  </Button>
-                  <Button onClick={closeDeleteModal} appearance="subtle">
-                    キャンセル
-                  </Button>
-                </ModalFooter>
-              </DeleteModal>
-            </ButtonGroup>
+            <EditButton
+              componentClass={Link}
+              to={Paths.articleEdit(article.id)}
+            >
+              編集
+            </EditButton>
           )}
         </TitleRow>
         <HeaderInfo>
@@ -110,7 +69,6 @@ const ArticleDetailPage: FC = () => {
       </Header>
       {article.image && <MainVisual src={article.image} alt="" />}
       <ArticleHtmlContent dangerHtml={article.content} />
-      {isSubmitting && <OverlayLoader backdrop />}
     </>
   );
 };
@@ -127,12 +85,8 @@ const TitleRow = styled.div`
   justify-content: space-between;
 `;
 
-const ButtonGroup = styled.div`
-  display: flex;
+const EditButton = styled(Button)`
   margin-left: 20px;
-  > * {
-    margin-left: 10px;
-  }
 `;
 
 const HeaderInfo = styled.div`
@@ -177,14 +131,4 @@ const MainVisual = styled.img`
   display: block;
   margin: 0 auto 30px;
   max-width: 100%;
-`;
-
-const DeleteModal = styled(Modal)`
-  @media (max-width: 420px) {
-    width: 90%;
-  }
-`;
-
-const ModalFooter = styled(Modal.Footer)`
-  margin-top: 10px;
 `;

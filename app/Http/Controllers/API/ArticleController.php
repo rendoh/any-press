@@ -39,6 +39,12 @@ class ArticleController extends Controller
         return $this->articlerService->paginateByTag($tag);
     }
 
+    public function myArticles()
+    {
+        $user = auth()->user();
+        return $this->articlerService->paginateMyArticles($user);
+    }
+
     public function store(StoreArticleRequest $request)
     {
         $user = auth()->user();
@@ -47,9 +53,11 @@ class ArticleController extends Controller
         return response()->json($article, 201);
     }
 
-    public function show($id)
+    public function show(Article $article)
     {
-        return $this->articlerService->getDetail($id);
+        $this->authorize('view', $article);
+
+        return $article->loadWithRelations()->makeVisible(['content']);
     }
 
     public function update(StoreArticleRequest $request, Article $article)
@@ -57,7 +65,7 @@ class ArticleController extends Controller
         $this->authorize('update', $article);
         $this->articlerService->update($article, $request->validated());
 
-        return $article->loadWithRelations();
+        return $article->loadWithRelations()->makeVisible(['content']);
     }
 
     public function destroy(Article $article)

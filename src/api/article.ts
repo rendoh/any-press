@@ -22,6 +22,12 @@ export async function fetchArticlesByUserId(
   );
 }
 
+export async function fetchMyArticles(params?: ArticlesParams) {
+  return apiClient.get<PaginationResponse<Article>>('/user/articles', {
+    params,
+  });
+}
+
 export async function fetchArticlesByCategorySlug(
   slug: string,
   params?: ArticlesParams,

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Alert } from 'rsuite';
 import { deleteArticle } from '../../api/article';
 import { handleApiError } from '../../utils/handleApiError';
 
@@ -17,6 +18,7 @@ export function useDeleteArticle({
     setIsSubmitting(true);
     try {
       await deleteArticle(id);
+      Alert.success('記事を削除しました');
       if (onSuccess) onSuccess();
     } catch (error) {
       handleApiError(error);

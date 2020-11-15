@@ -2,7 +2,8 @@ export const Paths = {
   home: '/',
   login: '/login',
   register: '/register',
-  accountSettings: '/account',
+  accountSettings: '/account/settings',
+  accountArticles: '/account/articles',
   articleCreate: '/articles/new',
   articleDetail: <T extends number | string = number>(id: T) =>
     `/articles/${id}`,

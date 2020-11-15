@@ -22,6 +22,9 @@ const TagArticlesPage = React.lazy(() => import('../pages/TagArticlesPage'));
 const Login = React.lazy(() => import('../pages/Login'));
 const Register = React.lazy(() => import('../pages/Register'));
 const AccountSettings = React.lazy(() => import('../pages/AccountSettings'));
+const AccountArticlesPage = React.lazy(
+  () => import('../pages/AccountArticlesPage'),
+);
 const NotFoundPage = React.lazy(() => import('../pages/NotFoundPage'));
 
 const publicRoutes: PartialRouteObject[] = [
@@ -67,6 +70,10 @@ const privateRoutes: PartialRouteObject[] = [
   {
     path: Paths.accountSettings,
     element: <AccountSettings />,
+  },
+  {
+    path: Paths.accountArticles,
+    element: <AccountArticlesPage />,
   },
   {
     path: Paths.articleCreate,

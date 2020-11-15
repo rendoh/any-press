@@ -25,7 +25,7 @@ Route::prefix('v1')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('articles', [ArticleController::class, 'index']);
-    Route::get('articles/{id}', [ArticleController::class, 'show']);
+    Route::get('articles/{article}', [ArticleController::class, 'show']);
     Route::get('categories', [CategoryController::class, 'index']);
     Route::get('categories/{category:slug}', [CategoryController::class, 'show']);
     Route::get('categories/{category:slug}/articles', [ArticleController::class, 'indexByCategory']);
@@ -39,6 +39,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('user', [UserController::class, 'account']);
         Route::put('user', [UserController::class, 'update']);
+        Route::get('user/articles', [ArticleController::class, 'myArticles']);
         Route::post('upload', ImageController::class);
         Route::post('articles', [ArticleController::class, 'store']);
         Route::put('articles/{article}', [ArticleController::class, 'update']);

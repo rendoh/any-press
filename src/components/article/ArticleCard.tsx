@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import { Icon, Panel, Tag, Tooltip, Whisper } from 'rsuite';
+import { Button, Icon, Panel, Tag, Tooltip, Whisper } from 'rsuite';
 import { Article } from '../../types/article';
 import Avatar from '../core/Avatar';
 import { formatISOString } from '../../utils/formatters';
 import { Link } from 'react-router-dom';
 import { Paths } from '../../constants/paths';
+import { useAuthenticatedUser } from '../../hooks/recoil/auth';
 
 type ArticleCardProps = {
   article: Article;
@@ -15,47 +16,70 @@ type ArticleCardProps = {
 
 const ArticleCard: FC<ArticleCardProps> = ({
   className,
-  article: { id, title, excerpt, image, created_at, category, tags, user },
-}) => (
-  <Wrapper
-    header={<Link to={Paths.articleDetail(id)}>{title}</Link>}
-    bordered
-    className={className}
-  >
-    <ImageLink to={Paths.articleDetail(id)}>
-      {image ? (
-        <Image src={image} alt="" />
-      ) : (
-        <PlaceholderImage>
-          <ImageIcon icon="image" />
-        </PlaceholderImage>
-      )}
-    </ImageLink>
-    <CreatedAt>{formatISOString(created_at)}</CreatedAt>
-    <Paragraph>{excerpt}</Paragraph>
-    <Categories>
-      <CategoryTag componentClass={Link} to={Paths.category(category.slug)}>
-        {category.name}
-      </CategoryTag>
-      {tags.map((tag) => (
-        <Tag componentClass={Link} to={Paths.tag(tag.slug)} key={tag.id}>
-          {tag.name}
-        </Tag>
-      ))}
-    </Categories>
-    <Whisper
-      trigger="hover"
-      placement="right"
-      speaker={<Tooltip>{user.name}</Tooltip>}
+  article: {
+    id,
+    title,
+    excerpt,
+    image,
+    created_at,
+    category,
+    tags,
+    user,
+    public: isPublic,
+  },
+}) => {
+  const authenticatedUser = useAuthenticatedUser();
+  const isOwnArticle = authenticatedUser?.id === user.id;
+
+  return (
+    <Wrapper
+      header={<Link to={Paths.articleDetail(id)}>{title}</Link>}
+      bordered
+      className={className}
     >
-      <AvatarTrigger>
-        <Link to={Paths.userDetail(user.id)}>
-          <Avatar avatar={user.avatar} />
-        </Link>
-      </AvatarTrigger>
-    </Whisper>
-  </Wrapper>
-);
+      <ImageLink to={Paths.articleDetail(id)}>
+        {image ? (
+          <Image src={image} alt="" />
+        ) : (
+          <PlaceholderImage>
+            <ImageIcon icon="image" />
+          </PlaceholderImage>
+        )}
+      </ImageLink>
+      <Info>
+        {!isPublic && <Private>非公開</Private>}
+        <CreatedAt>{formatISOString(created_at)}</CreatedAt>
+      </Info>
+      <Paragraph>{excerpt}</Paragraph>
+      <Categories>
+        <CategoryTag componentClass={Link} to={Paths.category(category.slug)}>
+          {category.name}
+        </CategoryTag>
+        {tags.map((tag) => (
+          <Tag componentClass={Link} to={Paths.tag(tag.slug)} key={tag.id}>
+            {tag.name}
+          </Tag>
+        ))}
+      </Categories>
+      <Whisper
+        trigger="hover"
+        placement="right"
+        speaker={<Tooltip>{user.name}</Tooltip>}
+      >
+        <AvatarTrigger>
+          <Link to={Paths.userDetail(user.id)}>
+            <Avatar avatar={user.avatar} />
+          </Link>
+        </AvatarTrigger>
+      </Whisper>
+      {isOwnArticle && (
+        <EditButton componentClass={Link} to={Paths.articleEdit(id)}>
+          編集
+        </EditButton>
+      )}
+    </Wrapper>
+  );
+};
 
 export default ArticleCard;
 
@@ -101,9 +125,21 @@ const ImageIcon = styled(Icon)`
   color: #666;
 `;
 
+const Info = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: -15px;
+  margin-bottom: 10px;
+`;
+
+const Private = styled(Tag)`
+  margin-right: 10px;
+  background: #333;
+  color: #fff;
+`;
+
 const CreatedAt = styled.p`
   color: #666;
-  margin-top: -15px;
   font-size: 80%;
 `;
 
@@ -136,4 +172,10 @@ const AvatarTrigger = styled.div`
 
 const ImageLink = styled(Link)`
   display: block;
+`;
+
+const EditButton = styled(Button)`
+  position: absolute;
+  top: 10px;
+  right: 10px;
 `;

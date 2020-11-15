@@ -9,6 +9,19 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class ArticlePolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Article  $article
+     * @return mixed
+     */
+    public function view(User $user, Article $article)
+    {
+        return $article->public || ($user && $user->id === $article->user->id);
+    }
+
     /**
      * Determine whether the user can update the model.
      *

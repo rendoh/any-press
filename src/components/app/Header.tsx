@@ -47,6 +47,9 @@ const Header: FC = () => {
               <Dropdown.Item componentClass={Link} to={Paths.accountSettings}>
                 アカウント編集
               </Dropdown.Item>
+              <Dropdown.Item componentClass={Link} to={Paths.accountArticles}>
+                投稿した記事一覧
+              </Dropdown.Item>
               <Dropdown.Item onSelect={handleLogoutClick}>
                 ログアウト
               </Dropdown.Item>
