@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Models\User;
 use App\Http\Requests\StoreArticleRequest;
 use App\Services\ArticleService;
 
@@ -19,6 +20,11 @@ class ArticleController extends Controller
     public function index()
     {
         return $this->articlerService->paginate();
+    }
+
+    public function indexByUser(User $user)
+    {
+        return $this->articlerService->paginateByUser($user);
     }
 
     public function store(StoreArticleRequest $request)

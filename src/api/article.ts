@@ -1,15 +1,25 @@
-import { PaginationResponse } from '../types/api';
+import { PaginationParams, PaginationResponse } from '../types/api';
 import { Article, ArticleDetail } from '../types/article';
 import { apiClient } from './client';
 
-export type ArticlesParams = {
-  page?: number;
-};
+export type ArticlesParams = PaginationParams;
 
 export async function fetchArticles(params?: ArticlesParams) {
   return apiClient.get<PaginationResponse<Article>>('/articles', {
     params,
   });
+}
+
+export async function fetchArticlesByUserId(
+  userId: number,
+  params?: ArticlesParams,
+) {
+  return apiClient.get<PaginationResponse<Article>>(
+    `/users/${userId}/articles`,
+    {
+      params,
+    },
+  );
 }
 
 export async function fetchArticleDetail(id: number) {

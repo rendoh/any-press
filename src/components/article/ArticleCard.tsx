@@ -45,7 +45,9 @@ const ArticleCard: FC<ArticleCardProps> = ({
       speaker={<Tooltip>{user.name}</Tooltip>}
     >
       <AvatarTrigger>
-        <Avatar avatar={user.avatar} />
+        <Link to={Paths.userDetail(user.id)}>
+          <Avatar avatar={user.avatar} />
+        </Link>
       </AvatarTrigger>
     </Whisper>
   </Wrapper>

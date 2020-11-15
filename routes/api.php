@@ -30,6 +30,7 @@ Route::prefix('v1')->group(function () {
     Route::get('tags', [TagController::class, 'index']);
     Route::get('users', [UserController::class, 'index']);
     Route::get('users/{id}', [UserController::class, 'show']);
+    Route::get('users/{user}/articles', [ArticleController::class, 'indexByUser']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('user', [UserController::class, 'account']);

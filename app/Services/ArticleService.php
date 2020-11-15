@@ -10,7 +10,17 @@ class ArticleService
     public function paginate()
     {
         return Article::withRelations()
-            ->where('public', true)
+            ->public()
+            ->latest()
+            ->paginate(10);
+    }
+
+    public function paginateByUser(User $user)
+    {
+        return $user
+            ->articles()
+            ->withRelations()
+            ->public()
             ->latest()
             ->paginate(10);
     }

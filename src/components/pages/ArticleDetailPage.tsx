@@ -86,10 +86,10 @@ const ArticleDetailPage: FC = () => {
           )}
         </TitleRow>
         <HeaderInfo>
-          <UserInfo>
+          <UserLink to={Paths.userDetail(article.user.id)}>
             <Avatar avatar={article.user.avatar} />
             <UserInfoName>{article.user.name}</UserInfoName>
-          </UserInfo>
+          </UserLink>
           <Separator>/</Separator>
           <DateText>{formatISOString(article.created_at)}</DateText>
         </HeaderInfo>
@@ -138,7 +138,7 @@ const HeaderInfo = styled.div`
   margin-top: 20px;
 `;
 
-const UserInfo = styled.div`
+const UserLink = styled(Link)`
   display: flex;
   align-items: center;
 `;

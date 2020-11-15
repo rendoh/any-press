@@ -1,10 +1,8 @@
-import { PaginationResponse } from '../types/api';
+import { PaginationParams, PaginationResponse } from '../types/api';
 import { User, UserAccount, UserInfo } from '../types/user';
 import { apiClient } from './client';
 
-export type UsersParams = {
-  page?: number;
-};
+export type UsersParams = PaginationParams;
 
 export async function fetchUsers(params?: UsersParams) {
   return apiClient.get<PaginationResponse<UserInfo>>('/users', {

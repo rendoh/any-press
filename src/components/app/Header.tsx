@@ -27,6 +27,11 @@ const Header: FC = () => {
         <Logo to={Paths.home}>HOME</Logo>
       </Navbar.Header>
       <Navbar.Body>
+        <Nav>
+          <Nav.Item componentClass={Link} to={Paths.users}>
+            ユーザ一覧
+          </Nav.Item>
+        </Nav>
         <Nav pullRight>
           {authenticatedUser ? (
             <AvatarDropdown
