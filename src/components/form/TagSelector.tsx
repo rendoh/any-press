@@ -10,9 +10,7 @@ type TagSelectorProps = Pick<FormControlPickerProps<number[]>, 'onChange'> & {
   value?: number[];
 };
 const TagSelector: FC<TagSelectorProps> = ({ id, onChange, value = [] }) => {
-  const { tags, isLoading, refetch } = useTags({
-    disableInitialFetch: true,
-  });
+  const { tags, isLoading, refetch } = useTags();
   const tagOptions: Option[] = useMemo(() => {
     return convertToOptions(tags);
   }, [tags]);

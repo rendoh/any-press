@@ -17,9 +17,7 @@ const CategorySelector: FC<CategorySelectorProps> = ({
   onChange,
   value,
 }) => {
-  const { categories, isLoading, refetch } = useCategories({
-    disableInitialFetch: true,
-  });
+  const { categories, isLoading, refetch } = useCategories();
   const categoryOptions: Option[] = useMemo(() => {
     return convertToOptions(categories);
   }, [categories]);
