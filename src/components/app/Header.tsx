@@ -10,6 +10,7 @@ import {
 } from '../../hooks/recoil/auth';
 import { Paths } from '../../constants/paths';
 import Avatar from '../core/Avatar';
+import { css, Global } from '@emotion/core';
 
 const Header: FC = () => {
   const authenticatedUser = useAuthenticatedUser();
@@ -20,7 +21,8 @@ const Header: FC = () => {
   };
 
   return (
-    <Navbar appearance="inverse">
+    <Root appearance="inverse">
+      <Global styles={globalStyle} />
       <Navbar.Header>
         <Logo to={Paths.home}>HOME</Logo>
       </Navbar.Header>
@@ -56,11 +58,25 @@ const Header: FC = () => {
           )}
         </Nav>
       </Navbar.Body>
-    </Navbar>
+    </Root>
   );
 };
 
 export default Header;
+
+const globalStyle = css`
+  body {
+    padding-top: 56px;
+  }
+`;
+
+const Root = styled(Navbar)`
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+  top: 0;
+  left: 0;
+`;
 
 const Logo = styled(Link)`
   font-weight: bold;
