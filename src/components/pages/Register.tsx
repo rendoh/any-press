@@ -13,6 +13,7 @@ import MinimalForm from '../form/MinimalForm';
 import Field from '../form/Field';
 import { useRegister } from '../../hooks/api/useRegister';
 import OverlayLoader from '../core/OverlayLoader';
+import SEO from '../core/SEO';
 
 const Register: FC = () => {
   const {
@@ -45,6 +46,7 @@ const Register: FC = () => {
 
   return (
     <>
+      <SEO title="ユーザ登録" />
       <MinimalForm header="ユーザ登録" onSubmit={handleSubmit(onSubmit)}>
         <Field label="ユーザ名" htmlFor="name" error={errors.name?.message}>
           <Input id="name" name="name" type="text" inputRef={register} />

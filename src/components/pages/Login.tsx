@@ -13,6 +13,7 @@ import Field from '../form/Field';
 import MinimalForm from '../form/MinimalForm';
 import { useLogin } from '../../hooks/api/useLogin';
 import OverlayLoader from '../core/OverlayLoader';
+import SEO from '../core/SEO';
 
 const Login: FC = () => {
   const {
@@ -50,6 +51,7 @@ const Login: FC = () => {
 
   return (
     <>
+      <SEO title="ログイン" />
       <MinimalForm header="ログイン" onSubmit={handleSubmit(onSubmit)}>
         <Field
           label="メールアドレス"

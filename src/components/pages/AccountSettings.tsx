@@ -11,6 +11,7 @@ import { useUserAccount } from '../../hooks/api/useUserAccount';
 import { useUpdateUser } from '../../hooks/api/useUpdateUser';
 import ImageUploader from '../form/ImageUploader';
 import OverlayLoader from '../core/OverlayLoader';
+import SEO from '../core/SEO';
 
 const AccountSettings: FC = () => {
   const {
@@ -58,6 +59,7 @@ const AccountSettings: FC = () => {
 
   return (
     <Wrapper>
+      <SEO title="アカウント編集" />
       <Heading>アカウント編集</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Field label="アバター" htmlFor="avatar">

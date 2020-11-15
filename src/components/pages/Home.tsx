@@ -5,6 +5,7 @@ import { Pagination } from 'rsuite';
 import { useArticles } from '../../hooks/api/useArticles';
 import ArticleList from '../article/ArticleList';
 import OverlayLoader from '../core/OverlayLoader';
+import SEO from '../core/SEO';
 
 const Home: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,6 +36,7 @@ const Home: FC = () => {
 
   return (
     <>
+      <SEO />
       <ArticleList articles={articles} />
       <PaginationWrapper>
         <Pagination

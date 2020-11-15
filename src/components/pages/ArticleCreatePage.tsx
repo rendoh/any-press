@@ -6,6 +6,7 @@ import { Paths } from '../../constants/paths';
 import ArticleEditor, {
   ArticleEditorErrorEntries,
 } from '../article/ArticleEditor';
+import SEO from '../core/SEO';
 
 const ArticleCreatePage: FC = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const ArticleCreatePage: FC = () => {
 
   return (
     <>
+      <SEO title="新規記事作成" />
       <Heading>新規記事作成</Heading>
       <ArticleEditor onSubmit={createArticle} errorEntries={errorEntries} />
     </>

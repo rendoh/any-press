@@ -13,6 +13,7 @@ import ArticleEditor, {
 import Forbidden from '../core/Forbidden';
 import NotFound from '../core/NotFound';
 import OverlayLoader from '../core/OverlayLoader';
+import SEO from '../core/SEO';
 
 const ArticleEditPage: FC = () => {
   const { id } = useParams();
@@ -39,14 +40,25 @@ const ArticleEditPage: FC = () => {
     return <OverlayLoader backdrop={false} />;
   }
   if (!article) {
-    return <NotFound />;
+    return (
+      <>
+        <SEO title="記事が見つかりませんでした" />
+        <NotFound />
+      </>
+    );
   }
   if (authenticateduser?.id !== article.user.id) {
-    return <Forbidden />;
+    return (
+      <>
+        <SEO title="権限がありません" />
+        <Forbidden />
+      </>
+    );
   }
 
   return (
     <>
+      <SEO title={`「${article.title}」編集`} />
       <Heading>記事編集</Heading>
       <ArticleEditor
         defaultValues={convertArticleToFormValues(article)}

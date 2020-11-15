@@ -9,6 +9,7 @@ import NotFound from '../core/NotFound';
 import OverlayLoader from '../core/OverlayLoader';
 import { Paths } from '../../constants/paths';
 import { useAuthenticatedUser } from '../../hooks/recoil/auth';
+import SEO from '../core/SEO';
 
 const ArticleDetailPage: FC = () => {
   const { id } = useParams();
@@ -19,11 +20,17 @@ const ArticleDetailPage: FC = () => {
     return <OverlayLoader backdrop={false} />;
   }
   if (!article) {
-    return <NotFound />;
+    return (
+      <>
+        <SEO title="記事が見つかりませんでした" />
+        <NotFound />
+      </>
+    );
   }
 
   return (
     <>
+      <SEO title={article.title} />
       <Header>
         <TitleRow>
           <Title>{article.title}</Title>

@@ -5,7 +5,7 @@ const Forbidden: FC = () => {
   return (
     <Wrapper>
       <Heading>403</Heading>
-      <Message>お探しのページはアクセス権限がありませんでした</Message>
+      <Message>お探しのページはアクセス権限がありません</Message>
     </Wrapper>
   );
 };
