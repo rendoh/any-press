@@ -1,18 +1,19 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
-import { useParams } from 'react-router-dom';
-import { Tag } from 'rsuite';
+import { Link, useParams } from 'react-router-dom';
+import { Button, Tag } from 'rsuite';
 import { useArticleDetail } from '../../hooks/api/useArticleDetail';
 import { formatISOString } from '../../utils/formatters';
 import Avatar from '../core/Avatar';
 import NotFound from '../core/NotFound';
-import { css } from '@emotion/core';
 import OverlayLoader from '../core/OverlayLoader';
+import { Paths } from '../../constants/paths';
+import { useAuthenticatedUser } from '../../hooks/recoil/auth';
 
 const ArticleDetailPage: FC = () => {
   const { id } = useParams();
-
   const { articleDetail: article, isLoading } = useArticleDetail(Number(id));
+  const authenticateduser = useAuthenticatedUser();
 
   if (isLoading) {
     return <OverlayLoader backdrop={false} />;
@@ -22,9 +23,19 @@ const ArticleDetailPage: FC = () => {
   }
 
   return (
-    <Root>
+    <>
       <Header>
-        <Title>{article.title}</Title>
+        <TitleRow>
+          <Title>{article.title}</Title>
+          {authenticateduser?.id === article.user.id && (
+            <EditButton
+              componentClass={Link}
+              to={Paths.articleEdit(article.id)}
+            >
+              編集
+            </EditButton>
+          )}
+        </TitleRow>
         <HeaderInfo>
           <UserInfo>
             <Avatar avatar={article.user.avatar} />
@@ -46,31 +57,29 @@ const ArticleDetailPage: FC = () => {
           __html: article.content,
         }}
       />
-    </Root>
+    </>
   );
 };
 
 export default ArticleDetailPage;
-
-const Root = styled.div`
-  padding-bottom: 50px;
-`;
 
 const Title = styled.h1`
   font-size: 24px;
   line-height: 1.5;
 `;
 
-const containerStyle = css`
-  max-width: 980px;
-  padding: 0 20px;
-  margin: auto;
+const Header = styled.header`
+  margin-bottom: 20px;
 `;
 
-const Header = styled.header`
-  ${containerStyle}
-  padding-top: 30px;
-  padding-bottom: 30px;
+const TitleRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const EditButton = styled(Button)`
+  margin-left: 20px;
 `;
 
 const HeaderInfo = styled.div`
@@ -113,10 +122,8 @@ const CategoryTag = styled(Tag)`
 
 const MainVisual = styled.img`
   display: block;
-  margin: 0 auto 50px;
+  margin: 0 auto 30px;
   max-width: 100%;
 `;
 
-const Content = styled.div`
-  ${containerStyle}
-`;
+const Content = styled.div``;

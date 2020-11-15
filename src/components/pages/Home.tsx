@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import React, { FC, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { IconButton, Pagination } from 'rsuite';
+import { Pagination } from 'rsuite';
 import { useArticles } from '../../hooks/api/useArticles';
-import { useIsAuthenticated } from '../../hooks/recoil/auth';
 import ArticleList from '../article/ArticleList';
 import OverlayLoader from '../core/OverlayLoader';
 

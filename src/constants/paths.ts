@@ -6,4 +6,6 @@ export const Paths = {
   articleCreate: '/articles/new',
   articleDetail: <T extends number | string = number>(id: T) =>
     `/articles/${id}`,
+  articleEdit: <T extends number | string = number>(id: T) =>
+    `/articles/${id}/edit`,
 } as const;

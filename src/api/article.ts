@@ -26,3 +26,7 @@ export type ArticleValues = {
 export async function createArticle(values: ArticleValues) {
   return apiClient.post<ArticleDetail>('/articles', values);
 }
+
+export async function updateArticle(id: number, values: ArticleValues) {
+  return apiClient.put<ArticleDetail>(`/articles/${id}`, values);
+}

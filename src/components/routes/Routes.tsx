@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { PartialRouteObject } from 'react-router';
 import { useRoutes } from 'react-router-dom';
 import { Paths } from '../../constants/paths';
+import ArticleEditPage from '../pages/ArticleEditPage';
 import AsyncRoute from './AsyncRoute';
 import PrivateRoute from './PrivateRoute';
 
@@ -48,6 +49,10 @@ const privateRoutes: PartialRouteObject[] = [
   {
     path: Paths.articleCreate,
     element: <ArticleCreatePage />,
+  },
+  {
+    path: Paths.articleEdit(':id'),
+    element: <ArticleEditPage />,
   },
 ];
 
