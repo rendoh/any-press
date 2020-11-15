@@ -84,6 +84,9 @@ const ArticleEditor: FC<ArticleEditorProps> = ({
                 onSuccess={(filePath) => {
                   setValue('image', filePath);
                 }}
+                onRemove={() => {
+                  setValue('image', '');
+                }}
               />
             </Field>
           </FieldColumn>

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, { FC } from 'react';
-import { Icon } from 'rsuite';
+import { Icon, IconButton } from 'rsuite';
 import { IconNames } from 'rsuite/lib/Icon';
 import { useUpload } from '../../hooks/api/useUpload';
 import OverlayLoader from '../core/OverlayLoader';
@@ -12,11 +12,14 @@ type ImageUploaderProps = {
   className?: string;
   icon?: IconNames;
   name?: string;
+  onRemove?: () => void;
 };
 
 const ImageUploader: FC<ImageUploaderProps> = ({
   image,
   onSuccess,
+  onError,
+  onRemove,
   className,
   name,
   icon = 'image',
@@ -24,6 +27,11 @@ const ImageUploader: FC<ImageUploaderProps> = ({
   const { upload, isUploading } = useUpload({
     onSuccess(filePath) {
       onSuccess(filePath);
+    },
+    onError() {
+      if (onError) {
+        onError();
+      }
     },
   });
   return (
@@ -41,6 +49,14 @@ const ImageUploader: FC<ImageUploaderProps> = ({
         }}
       />
       {image ? <Preview src={image} alt="" /> : <Icon icon={icon} size="5x" />}
+      {image && (
+        <RemoveButton
+          circle
+          icon={<Icon icon="close" />}
+          size="xs"
+          onClick={onRemove}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -73,4 +89,10 @@ const Preview = styled.img`
   width: 100%;
   height: 100%;
   background: #ccc;
+`;
+
+const RemoveButton = styled(IconButton)`
+  position: absolute !important;
+  top: 12px;
+  right: 12px;
 `;

@@ -61,24 +61,15 @@ const AccountSettings: FC = () => {
       <Heading>アカウント編集</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Field label="アバター" htmlFor="avatar">
-          <UploaderWrapper>
-            <AvatarUploader
-              name="avatar"
-              image={avatar}
-              onSuccess={(filePath) => {
-                setValue('avatar', filePath);
-              }}
-              icon="user"
-            />
-            {avatar && (
-              <RemoveButton
-                circle
-                icon={<Icon icon="close" />}
-                size="sm"
-                onClick={() => setValue('avatar', '')}
-              />
-            )}
-          </UploaderWrapper>
+          <AvatarUploader
+            name="avatar"
+            image={avatar}
+            icon="user"
+            onSuccess={(filePath) => {
+              setValue('avatar', filePath);
+            }}
+            onRemove={() => setValue('avatar', '')}
+          />
         </Field>
         <Field label="ユーザ名" htmlFor="name" error={errors.name?.message}>
           <Input id="name" name="name" inputRef={register} type="text" />
@@ -127,18 +118,7 @@ const Heading = styled.h1`
 
 const uploaderSize = 200;
 
-const UploaderWrapper = styled.div`
-  width: ${uploaderSize}px;
-  position: relative;
-`;
-
 const AvatarUploader = styled(ImageUploader)`
   width: ${uploaderSize}px;
   height: ${uploaderSize}px;
-`;
-
-const RemoveButton = styled(IconButton)`
-  position: absolute !important;
-  top: 10px;
-  right: 10px;
 `;
