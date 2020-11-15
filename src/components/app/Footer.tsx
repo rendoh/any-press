@@ -9,6 +9,11 @@ const activeFloatingButtonPaths = [
   Paths.home,
   Paths.articleDetail(':id'),
   Paths.users,
+  Paths.userDetail(':id'),
+  Paths.accountArticles,
+  Paths.articleDetail(':id'),
+  Paths.category(':slug'),
+  Paths.tag(':slug'),
 ];
 
 function isActiveFloatingButtonPath(pathname: string) {
