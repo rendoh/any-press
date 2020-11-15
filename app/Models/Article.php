@@ -13,6 +13,7 @@ class Article extends Model
     use HasFactory;
 
     const EXCERPT_LENGTH = 200;
+    const RELATIONS = ['user', 'category', 'tags'];
 
     protected $casts = [
         'public' => 'boolean',
@@ -71,5 +72,15 @@ class Article extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function scopeWithRelations($query)
+    {
+        return $query->with(self::RELATIONS);
+    }
+
+    public function loadWithRelations()
+    {
+        return $this->load(self::RELATIONS);
     }
 }

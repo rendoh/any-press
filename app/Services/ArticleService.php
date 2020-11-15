@@ -9,7 +9,7 @@ class ArticleService
 {
     public function paginate()
     {
-        return Article::with(['user', 'category', 'tags'])
+        return Article::withRelations()
             ->where('public', true)
             ->latest()
             ->paginate(10);
@@ -17,7 +17,7 @@ class ArticleService
 
     public function getDetail($id)
     {
-        return Article::with(['user', 'category', 'tags'])
+        return Article::withRelations()
             ->where([
                 'id' => $id,
                 'public' => true,
@@ -31,6 +31,14 @@ class ArticleService
         $data = array_merge($data, ['user_id' => $user->id]);
         $article = Article::create($data);
         $article->tags()->attach($data['tags']);
+
+        return $article;
+    }
+
+    public function update(Article $article, array $data): Article
+    {
+        $article->update($data);
+        $article->tags()->sync($data['tags']);
 
         return $article;
     }
