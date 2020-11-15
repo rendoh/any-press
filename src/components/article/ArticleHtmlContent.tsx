@@ -86,6 +86,25 @@ const Content = styled.div`
     line-height: var(--line-height);
   }
 
+  h1 {
+    font-size: 30px;
+  }
+  h2 {
+    font-size: 24px;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  h4 {
+    font-size: 14px;
+  }
+  h5 {
+    font-size: 13px;
+  }
+  h6 {
+    font-size: 12px;
+  }
+
   mark {
     padding: 0.1rem;
   }
