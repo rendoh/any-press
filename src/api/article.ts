@@ -22,6 +22,27 @@ export async function fetchArticlesByUserId(
   );
 }
 
+export async function fetchArticlesByCategorySlug(
+  slug: string,
+  params?: ArticlesParams,
+) {
+  return apiClient.get<PaginationResponse<Article>>(
+    `/categories/${slug}/articles`,
+    {
+      params,
+    },
+  );
+}
+
+export async function fetchArticlesByTagSlug(
+  slug: string,
+  params?: ArticlesParams,
+) {
+  return apiClient.get<PaginationResponse<Article>>(`/tags/${slug}/articles`, {
+    params,
+  });
+}
+
 export async function fetchArticleDetail(id: number) {
   return apiClient.get<ArticleDetail>(`/articles/${id}`);
 }

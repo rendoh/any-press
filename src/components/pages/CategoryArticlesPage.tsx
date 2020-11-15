@@ -1,28 +1,27 @@
-import styled from '@emotion/styled';
 import React, { FC } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useUserInfo } from '../../hooks/api/useUserInfo';
-import { useUserArticles } from '../../hooks/api/useUserArticles';
-import Avatar from '../core/Avatar';
+import { useCategory } from '../../hooks/api/useCategory';
+import { useCategoryArticles } from '../../hooks/api/useCategoryArticles';
+import ArticleList from '../article/ArticleList';
 import NotFound from '../core/NotFound';
 import OverlayLoader from '../core/OverlayLoader';
-import SEO from '../core/SEO';
-import ArticleList from '../article/ArticleList';
-import Pagination from '../core/Pagination';
 import PageTitle from '../core/PageTitle';
+import Pagination from '../core/Pagination';
+import SEO from '../core/SEO';
 
-const UserDetailPage: FC = () => {
-  const { id } = useParams();
+const CategoryArticlesPage: FC = () => {
+  const { slug } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const userId = Number(id);
   const page = Number(searchParams.get('page')) || 1;
-  const { userInfo, isLoading: isUserLoading } = useUserInfo(userId);
+  const { category, isLoading: isCategoryLoading } = useCategory(slug);
   const {
     articles,
     isLoading: isArticleLoading,
     total,
     perPage,
-  } = useUserArticles(userId, { page });
+  } = useCategoryArticles(slug, {
+    page,
+  });
 
   const pageCount = Math.ceil(total / perPage);
   const goto = (number: number) => {
@@ -35,24 +34,22 @@ const UserDetailPage: FC = () => {
     });
   };
 
-  if (isUserLoading) {
+  if (isCategoryLoading) {
     return <OverlayLoader backdrop={false} />;
   }
-  if (!userInfo) {
+  if (!category) {
     return (
       <>
-        <SEO title="ユーザが見つかりませんでした" />
+        <SEO title="カテゴリが見つかりませんでした" />
         <NotFound />
       </>
     );
   }
+
   return (
     <>
-      <SEO title={userInfo.name} />
-      <Header>
-        <Avatar avatar={userInfo.avatar} size="lg" />
-        <Name>{userInfo.name}</Name>
-      </Header>
+      <SEO title={category.name} />
+      <PageTitle>{category.name}</PageTitle>
       <ArticleList articles={articles} />
       {isArticleLoading ? (
         <OverlayLoader backdrop={false} />
@@ -63,14 +60,4 @@ const UserDetailPage: FC = () => {
   );
 };
 
-export default UserDetailPage;
-
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const Name = styled(PageTitle)`
-  margin: 0 auto 0 20px;
-`;
+export default CategoryArticlesPage;

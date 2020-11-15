@@ -34,9 +34,13 @@ const ArticleCard: FC<ArticleCardProps> = ({
     <CreatedAt>{formatISOString(created_at)}</CreatedAt>
     <Paragraph>{excerpt}</Paragraph>
     <Categories>
-      <CategoryTag>{category.name}</CategoryTag>
+      <CategoryTag componentClass={Link} to={Paths.category(category.slug)}>
+        {category.name}
+      </CategoryTag>
       {tags.map((tag) => (
-        <Tag key={tag.id}>{tag.name}</Tag>
+        <Tag componentClass={Link} to={Paths.tag(tag.slug)} key={tag.id}>
+          {tag.name}
+        </Tag>
       ))}
     </Categories>
     <Whisper

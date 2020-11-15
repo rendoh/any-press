@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useUsers } from '../../hooks/api/useUsers';
 import OverlayLoader from '../core/OverlayLoader';
+import PageTitle from '../core/PageTitle';
 import Pagination from '../core/Pagination';
 import SEO from '../core/SEO';
 import UserList from '../user/UserList';
@@ -24,6 +25,7 @@ const UsersPage: FC = () => {
   return (
     <div>
       <SEO title="ユーザ一覧" />
+      <PageTitle>ユーザ一覧</PageTitle>
       <UserList userInfos={users} />
       {isLoading ? (
         <OverlayLoader backdrop={false} />

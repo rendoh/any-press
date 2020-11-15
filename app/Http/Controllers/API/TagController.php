@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Services\TagService;
+use App\Models\Tag;
 
 class TagController extends Controller
 {
@@ -13,8 +14,14 @@ class TagController extends Controller
     {
         $this->tagService = $tagService;
     }
+
     public function index()
     {
         return $this->tagService->getAll();
+    }
+
+    public function show(Tag $tag)
+    {
+        return $tag;
     }
 }

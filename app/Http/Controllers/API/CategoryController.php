@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Services\CategoryService;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -13,8 +14,14 @@ class CategoryController extends Controller
     {
         $this->categoryService = $categoryService;
     }
+
     public function index()
     {
         return $this->categoryService->getAll();
+    }
+
+    public function show(Category $category)
+    {
+        return $category;
     }
 }

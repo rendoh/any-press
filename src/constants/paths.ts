@@ -10,4 +10,6 @@ export const Paths = {
     `/articles/${id}/edit`,
   users: '/users',
   userDetail: <T extends number | string = number>(id: T) => `/users/${id}`,
+  category: (slug: string) => `/categories/${slug}`,
+  tag: (slug: string) => `/tags/${slug}`,
 } as const;

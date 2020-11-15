@@ -78,7 +78,7 @@ const globalStyle = css`
 const Root = styled(Navbar)`
   position: fixed;
   width: 100%;
-  z-index: 2;
+  z-index: 10;
   top: 0;
   left: 0;
 `;

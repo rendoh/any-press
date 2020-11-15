@@ -12,6 +12,7 @@ import { useUpdateUser } from '../../hooks/api/useUpdateUser';
 import ImageUploader from '../form/ImageUploader';
 import OverlayLoader from '../core/OverlayLoader';
 import SEO from '../core/SEO';
+import PageTitle from '../core/PageTitle';
 
 const AccountSettings: FC = () => {
   const {
@@ -60,7 +61,7 @@ const AccountSettings: FC = () => {
   return (
     <Wrapper>
       <SEO title="アカウント編集" />
-      <Heading>アカウント編集</Heading>
+      <PageTitle>アカウント編集</PageTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Field label="アバター" htmlFor="avatar">
           <AvatarUploader
@@ -107,15 +108,8 @@ const validationSchema = Yup.object().shape<UpdateUserValues>({
 });
 
 const Wrapper = styled.div`
-  padding: 20px;
   max-width: 780px;
   margin: auto;
-`;
-
-const Heading = styled.h1`
-  font-size: 20px;
-  line-height: 1.5;
-  margin-bottom: 25px;
 `;
 
 const uploaderSize = 200;

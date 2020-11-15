@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import styled from '@emotion/styled';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArticleValues } from '../../api/article';
 import { Paths } from '../../constants/paths';
@@ -14,6 +13,7 @@ import Forbidden from '../core/Forbidden';
 import NotFound from '../core/NotFound';
 import OverlayLoader from '../core/OverlayLoader';
 import SEO from '../core/SEO';
+import PageTitle from '../core/PageTitle';
 
 const ArticleEditPage: FC = () => {
   const { id } = useParams();
@@ -58,7 +58,7 @@ const ArticleEditPage: FC = () => {
   return (
     <>
       <SEO title={`「${article.title}」編集`} />
-      <Heading>記事編集</Heading>
+      <PageTitle>記事編集</PageTitle>
       <ArticleEditor
         defaultValues={convertArticleToFormValues(article)}
         errorEntries={errorEntries}
@@ -85,9 +85,3 @@ const convertArticleToFormValues = ({
   category_id: category.id,
   tags: tags.map(({ id }) => id),
 });
-
-const Heading = styled.h1`
-  font-size: 20px;
-  line-height: 1.5;
-  margin-bottom: 25px;
-`;

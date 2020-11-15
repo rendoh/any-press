@@ -13,6 +13,7 @@ import SEO from '../core/SEO';
 import ArticleHtmlContent from '../article/ArticleHtmlContent';
 import { css } from '@emotion/core';
 import { useDeleteArticle } from '../../hooks/api/useDeleteArticle';
+import PageTitle from '../core/PageTitle';
 
 const ArticleDetailPage: FC = () => {
   const { id } = useParams();
@@ -50,7 +51,7 @@ const ArticleDetailPage: FC = () => {
       <SEO title={article.title} />
       <Header>
         <TitleRow>
-          <Title>{article.title}</Title>
+          <PageTitle>{article.title}</PageTitle>
           {authenticateduser?.id === article.user.id && (
             <ButtonGroup>
               <Button componentClass={Link} to={Paths.articleEdit(article.id)}>
@@ -94,9 +95,16 @@ const ArticleDetailPage: FC = () => {
           <DateText>{formatISOString(article.created_at)}</DateText>
         </HeaderInfo>
         <Categories>
-          <CategoryTag>{article.category.name}</CategoryTag>
+          <CategoryTag
+            componentClass={Link}
+            to={Paths.category(article.category.slug)}
+          >
+            {article.category.name}
+          </CategoryTag>
           {article.tags.map((tag) => (
-            <Tag key={tag.id}>{tag.name}</Tag>
+            <Tag componentClass={Link} to={Paths.tag(tag.slug)} key={tag.id}>
+              {tag.name}
+            </Tag>
           ))}
         </Categories>
       </Header>
@@ -108,11 +116,6 @@ const ArticleDetailPage: FC = () => {
 };
 
 export default ArticleDetailPage;
-
-const Title = styled.h1`
-  font-size: 24px;
-  line-height: 1.5;
-`;
 
 const Header = styled.header`
   margin-bottom: 20px;
