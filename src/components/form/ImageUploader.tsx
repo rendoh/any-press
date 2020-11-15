@@ -54,7 +54,7 @@ const Wrapper = styled.span`
   justify-content: center;
   width: 200px;
   height: 200px;
-  border: 2px dashed #f1f1f1;
+  border: 2px dashed #e5e5ea;
   padding: 8px;
 `;
 
