@@ -4,25 +4,35 @@ namespace App\Services;
 
 use App\Models\Article;
 use App\Models\User;
+use App\Models\Category;
+use App\Models\Tag;
 
 class ArticleService
 {
     public function paginate()
     {
-        return Article::withRelations()
-            ->public()
-            ->latest()
-            ->paginate(10);
+        return Article::asPagination();
     }
 
     public function paginateByUser(User $user)
     {
         return $user
             ->articles()
-            ->withRelations()
-            ->public()
-            ->latest()
-            ->paginate(10);
+            ->asPagination();
+    }
+
+    public function paginateByCategory(Category $category)
+    {
+        return $category
+            ->articles()
+            ->asPagination();
+    }
+
+    public function paginateByTag(Tag $tag)
+    {
+        return $tag
+            ->articles()
+            ->asPagination();
     }
 
     public function getDetail($id)

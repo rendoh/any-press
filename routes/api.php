@@ -27,7 +27,9 @@ Route::prefix('v1')->group(function () {
     Route::get('articles', [ArticleController::class, 'index']);
     Route::get('articles/{id}', [ArticleController::class, 'show']);
     Route::get('categories', [CategoryController::class, 'index']);
+    Route::get('categories/{category:slug}/articles', [ArticleController::class, 'indexByCategory']);
     Route::get('tags', [TagController::class, 'index']);
+    Route::get('tags/{tag:slug}/articles', [ArticleController::class, 'indexByTag']);
     Route::get('users', [UserController::class, 'index']);
     Route::get('users/{id}', [UserController::class, 'show']);
     Route::get('users/{user}/articles', [ArticleController::class, 'indexByUser']);

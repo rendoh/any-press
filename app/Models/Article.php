@@ -88,4 +88,13 @@ class Article extends Model
     {
         return $query->where('public', true);
     }
+
+    public function scopeAsPagination($query, $count = 10)
+    {
+        return $query
+            ->withRelations()
+            ->public()
+            ->latest()
+            ->paginate($count);
+    }
 }
