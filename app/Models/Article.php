@@ -47,8 +47,9 @@ class Article extends Model
 
     public function getExcerptAttribute()
     {
-        $result = strip_tags($this->content);
-        return Str::limit($result, self::EXCERPT_LENGTH, '...');
+        $striped = (strip_tags($this->content));
+        $singleLined = preg_replace("/\r|\n/", "", $striped);
+        return Str::limit($singleLined, self::EXCERPT_LENGTH, '...');
     }
 
     public function setContentAttribute($value)
