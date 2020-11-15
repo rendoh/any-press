@@ -1,6 +1,16 @@
-# sbox
+# AnyPress
 
-Laravel sandbox project with React.
+ただ下記を試すだけの書き捨てのプロジェクト
+
+- Laravel 8 を試す
+- [x] Sanctum を試す
+- [ ] Laravel でのテストの作法を検証
+- [x] Laravel mix がどこまで使えるのか検証
+  - [x] TypeScript + React でできるのか
+  - [x] モノリシックで大丈夫か
+- [x] Recoil を使ってみる（脱 Redux & Redux Saga）
+- [ ] React のテストを Enzyme の代わりに testing-library を使ってみる
+- [x] OGP だけ Blade で SSR
 
 ## Laravel
 
@@ -30,10 +40,3 @@ $ npm run prod # build
 ```
 
 ※ここでは Babel Plugin を使うために、 TypeScript のトランスパイルも Babel で行う（詳細は `webpack.mix.js`参照）
-
-## TODO
-
-- [ ] SESSION_LIFETIME 401, 419
-- [ ] remember token
-- [ ] Helmet
-- [ ] OGP

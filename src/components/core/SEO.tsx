@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Helmet } from 'react-helmet';
 
-const appName = 'sbox';
+const appName = 'AnyPress';
 
 type SEOProps = {
   title?: string;

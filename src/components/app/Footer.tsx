@@ -46,7 +46,7 @@ const Footer: FC = () => {
         />
       )}
       <Wrapper>
-        <CopyRight>© sbox</CopyRight>
+        <CopyRight>© AnyPress</CopyRight>
       </Wrapper>
     </>
   );
