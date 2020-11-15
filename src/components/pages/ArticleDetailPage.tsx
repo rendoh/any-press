@@ -10,6 +10,7 @@ import OverlayLoader from '../core/OverlayLoader';
 import { Paths } from '../../constants/paths';
 import { useAuthenticatedUser } from '../../hooks/recoil/auth';
 import SEO from '../core/SEO';
+import ArticleHtmlContent from '../article/ArticleHtmlContent';
 
 const ArticleDetailPage: FC = () => {
   const { id } = useParams();
@@ -59,11 +60,7 @@ const ArticleDetailPage: FC = () => {
         </Categories>
       </Header>
       {article.image && <MainVisual src={article.image} alt="" />}
-      <Content
-        dangerouslySetInnerHTML={{
-          __html: article.content,
-        }}
-      />
+      <ArticleHtmlContent dangerHtml={article.content} />
     </>
   );
 };
@@ -132,5 +129,3 @@ const MainVisual = styled.img`
   margin: 0 auto 30px;
   max-width: 100%;
 `;
-
-const Content = styled.div``;
