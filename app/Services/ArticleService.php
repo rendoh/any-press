@@ -42,4 +42,9 @@ class ArticleService
 
         return $article;
     }
+
+    public function delete(Article $article)
+    {
+        $article->delete();
+    }
 }

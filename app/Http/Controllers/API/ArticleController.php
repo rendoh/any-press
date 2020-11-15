@@ -34,13 +34,6 @@ class ArticleController extends Controller
         return $this->articlerService->getDetail($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(StoreArticleRequest $request, Article $article)
     {
         $this->authorize('update', $article);
@@ -49,14 +42,11 @@ class ArticleController extends Controller
         return $article->loadWithRelations();
     }
 
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy($id)
-    // {
-    //     //
-    // }
+    public function destroy(Article $article)
+    {
+        $this->authorize('delete', $article);
+        $this->articlerService->delete($article);
+
+        return response()->noContent();
+    }
 }

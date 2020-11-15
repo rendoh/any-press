@@ -30,3 +30,7 @@ export async function createArticle(values: ArticleValues) {
 export async function updateArticle(id: number, values: ArticleValues) {
   return apiClient.put<ArticleDetail>(`/articles/${id}`, values);
 }
+
+export async function deleteArticle(id: number) {
+  return apiClient.delete<null>(`/articles/${id}`);
+}
