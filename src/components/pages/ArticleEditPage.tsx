@@ -120,12 +120,14 @@ const convertArticleToFormValues = ({
   content,
   category,
   tags,
+  public: isPublic,
 }: ArticleDetail): ArticleValues => ({
   title,
   image,
   content,
   category_id: category.id,
   tags: tags.map(({ id }) => id),
+  public: isPublic,
 });
 
 const Header = styled.header`

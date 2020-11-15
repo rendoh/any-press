@@ -59,6 +59,7 @@ export type ArticleValues = {
   content: string;
   category_id: number;
   tags?: number[];
+  public: boolean;
 };
 export async function createArticle(values: ArticleValues) {
   return apiClient.post<ArticleDetail>('/articles', values);

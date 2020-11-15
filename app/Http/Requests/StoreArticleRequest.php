@@ -30,6 +30,7 @@ class StoreArticleRequest extends FormRequest
             'content' => ['required', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
             'tags' => ['exists:tags,id'],
+            'public' => ['boolean'],
         ];
     }
 }

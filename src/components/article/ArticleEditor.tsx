@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { Button, Input } from 'rsuite';
+import { Button, Input, Toggle } from 'rsuite';
 import { ErrorEntry } from '../../api/ApiError';
 import { ArticleValues } from '../../api/article';
 import Field from '../form/Field';
@@ -15,7 +15,7 @@ import WysiwygEditor from '../form/WysiwygEditor';
 import OverlayLoader from '../core/OverlayLoader';
 
 export type ArticleEditorErrorEntries = ErrorEntry<
-  'title' | 'image' | 'content' | 'category_id' | 'tags'
+  'title' | 'image' | 'content' | 'category_id' | 'tags' | 'public'
 >[];
 export type ArticleEditorProps = {
   defaultValues?: ArticleValues;
@@ -27,6 +27,7 @@ const ArticleEditor: FC<ArticleEditorProps> = ({
   errorEntries,
   defaultValues = {
     tags: [],
+    public: true,
   },
 }) => {
   const {
@@ -46,11 +47,13 @@ const ArticleEditor: FC<ArticleEditorProps> = ({
   const selectedTagIds = watch('tags');
   const image = watch('image');
   const content = watch('content');
+  const isPublic = watch('public');
   useEffect(() => {
     register({ name: 'tags' });
     register({ name: 'category_id' });
     register({ name: 'image' });
     register({ name: 'content' });
+    register({ name: 'public' });
   }, [register]);
 
   useEffect(() => {
@@ -113,6 +116,16 @@ const ArticleEditor: FC<ArticleEditorProps> = ({
                 value={selectedTagIds}
               />
             </Field>
+            <Field label="公開状態" htmlFor="public">
+              <Toggle
+                id="public"
+                checked={isPublic}
+                onChange={(checked) => setValue('public', checked)}
+                size="lg"
+                checkedChildren="公開"
+                unCheckedChildren="非公開"
+              />
+            </Field>
           </FieldColumn>
         </FieldRow>
         <Field
@@ -145,6 +158,7 @@ const validationSchema = Yup.object().shape<ArticleValues>({
   title: Yup.string().required(ValidationMessages.required),
   content: Yup.string().required(ValidationMessages.required),
   category_id: Yup.number().required(ValidationMessages.required),
+  public: Yup.bool(),
 });
 
 const FileUploader = styled(ImageUploader)`
