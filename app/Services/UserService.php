@@ -15,6 +15,12 @@ class UserService
             ->paginate(10);
     }
 
+    public function getInfo($id)
+    {
+        return User::withCount('articles')
+            ->findOrFail($id);
+    }
+
     public function create(array $data): User
     {
         return User::create([

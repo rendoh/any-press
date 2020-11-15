@@ -12,6 +12,10 @@ export async function fetchUsers(params?: UsersParams) {
   });
 }
 
+export async function fetchUserInfo(id: number) {
+  return apiClient.get<UserInfo>(`/users/${id}`);
+}
+
 export type RegisterUserValues = {
   name: string;
   email: string;

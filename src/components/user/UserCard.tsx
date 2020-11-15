@@ -12,7 +12,7 @@ type UserCardProps = {
 };
 
 const UserCard: FC<UserCardProps> = ({ userInfo, className }) => (
-  <Root className={className} to={Paths.home}>
+  <Root className={className} to={Paths.userDetail(userInfo.id)}>
     <Panel bordered>
       <Row>
         <Avatar avatar={userInfo.avatar} />

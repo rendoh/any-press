@@ -46,4 +46,9 @@ class UserController extends Controller
         $account = $this->userService->getAsAccount($updatedUser);
         return response()->json($account);
     }
+
+    public function show($id)
+    {
+        return $this->userService->getInfo($id);
+    }
 }
