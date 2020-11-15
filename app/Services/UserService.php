@@ -8,6 +8,13 @@ use Illuminate\Http\UploadedFile;
 
 class UserService
 {
+    public function paginate()
+    {
+        return User::latest()
+            ->withCount('articles')
+            ->paginate(10);
+    }
+
     public function create(array $data): User
     {
         return User::create([

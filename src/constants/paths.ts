@@ -8,4 +8,5 @@ export const Paths = {
     `/articles/${id}`,
   articleEdit: <T extends number | string = number>(id: T) =>
     `/articles/${id}/edit`,
+  users: '/users',
 } as const;

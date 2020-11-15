@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useArticles } from '../../hooks/api/useArticles';
-import ArticleList from '../article/ArticleList';
+import { useUsers } from '../../hooks/api/useUsers';
 import OverlayLoader from '../core/OverlayLoader';
 import Pagination from '../core/Pagination';
 import SEO from '../core/SEO';
+import UserList from '../user/UserList';
 
-const Home: FC = () => {
+const UsersPage: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get('page')) || 1;
-  const { articles, isLoading, total, perPage } = useArticles({ page });
+  const { users, isLoading, total, perPage } = useUsers({ page });
   const pageCount = Math.ceil(total / perPage);
   const goto = (number: number) => {
     setSearchParams({
@@ -22,16 +22,16 @@ const Home: FC = () => {
   };
 
   return (
-    <>
-      <SEO />
-      <ArticleList articles={articles} />
+    <div>
+      <SEO title="ユーザ一覧" />
+      <UserList userInfos={users} />
       {isLoading ? (
         <OverlayLoader backdrop={false} />
       ) : (
         <Pagination pages={pageCount} activePage={page} onSelect={goto} />
       )}
-    </>
+    </div>
   );
 };
 
-export default Home;
+export default UsersPage;

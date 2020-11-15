@@ -11,27 +11,39 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function store(CreateUserRequest $request, UserService $userService)
+    private UserService $userService;
+
+    public function __construct(UserService $userService)
     {
-        $user = $userService->create($request->validated());
+        $this->userService = $userService;
+    }
+
+    public function index()
+    {
+        return $this->userService->paginate();
+    }
+
+    public function store(CreateUserRequest $request)
+    {
+        $user = $this->userService->create($request->validated());
         event(new Registered($user));
         Auth::login($user);
 
         return response()->json($user, 201);
     }
 
-    public function account(UserService $userService)
+    public function account()
     {
         $user = auth()->user();
-        $account = $userService->getAsAccount($user);
+        $account = $this->userService->getAsAccount($user);
         return response()->json($account);
     }
 
-    public function update(UpdateUserRequest $request, UserService $userService)
+    public function update(UpdateUserRequest $request)
     {
         $user = auth()->user();
-        $updatedUser = $userService->update($user, $request->validated());
-        $account = $userService->getAsAccount($updatedUser);
+        $updatedUser = $this->userService->update($user, $request->validated());
+        $account = $this->userService->getAsAccount($updatedUser);
         return response()->json($account);
     }
 }

@@ -28,6 +28,7 @@ Route::prefix('v1')->group(function () {
     Route::get('articles/{id}', [ArticleController::class, 'show']);
     Route::get('categories', [CategoryController::class, 'index']);
     Route::get('tags', [TagController::class, 'index']);
+    Route::get('users', [UserController::class, 'index']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('user', [UserController::class, 'account']);

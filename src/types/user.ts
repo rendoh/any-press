@@ -6,6 +6,10 @@ export type User = {
   avatar?: string;
 };
 
+export type UserInfo = User & {
+  articles_count: number;
+};
+
 export type UserAccount = User & {
   email: string;
 };

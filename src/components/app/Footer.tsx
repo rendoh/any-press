@@ -5,7 +5,11 @@ import { useIsAuthenticated } from '../../hooks/recoil/auth';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import { Paths } from '../../constants/paths';
 
-const activeFloatingButtonPaths = [Paths.home, Paths.articleDetail(':id')];
+const activeFloatingButtonPaths = [
+  Paths.home,
+  Paths.articleDetail(':id'),
+  Paths.users,
+];
 
 function isActiveFloatingButtonPath(pathname: string) {
   /**

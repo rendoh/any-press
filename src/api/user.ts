@@ -1,5 +1,16 @@
-import { User, UserAccount } from '../types/user';
+import { PaginationResponse } from '../types/api';
+import { User, UserAccount, UserInfo } from '../types/user';
 import { apiClient } from './client';
+
+export type UsersParams = {
+  page?: number;
+};
+
+export async function fetchUsers(params?: UsersParams) {
+  return apiClient.get<PaginationResponse<UserInfo>>('/users', {
+    params,
+  });
+}
 
 export type RegisterUserValues = {
   name: string;
