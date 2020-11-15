@@ -28,9 +28,9 @@ const ArticleEditPage: FC = () => {
     ArticleEditorErrorEntries
   >();
   const { updateArticle } = useUpdateArticle({
-    onSuccess() {
+    onSuccess(article) {
       requestAnimationFrame(() => {
-        navigate(Paths.home);
+        navigate(Paths.articleDetail(article.id));
       });
     },
     onError(errors) {
