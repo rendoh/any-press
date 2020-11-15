@@ -54,6 +54,7 @@ const ArticleDetailPage: FC = () => {
           <DateText>{formatISOString(article.created_at)}</DateText>
         </HeaderInfo>
         <Categories>
+          {!article.public && <PrivateTag>非公開</PrivateTag>}
           <CategoryTag
             componentClass={Link}
             to={Paths.category(article.category.slug)}
@@ -92,7 +93,6 @@ const EditButton = styled(Button)`
 const HeaderInfo = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 20px;
 `;
 
 const UserLink = styled(Link)`
@@ -120,6 +120,11 @@ const Categories = styled.div`
   > * {
     margin: 0 10px 10px 0 !important;
   }
+`;
+
+const PrivateTag = styled(Tag)`
+  background: #333;
+  color: #fff;
 `;
 
 const CategoryTag = styled(Tag)`
