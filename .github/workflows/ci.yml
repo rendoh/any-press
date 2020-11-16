@@ -27,15 +27,21 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
           rsync -av --delete --rsync-path="sudo rsync" \
-            --exclude=".git" \
-            --exclude=".github" \
-            --exclude=".gitignore" \
+            --exclude=".git*" \
             --exclude=".vscode" \
-            --exclude="node_modules" \
             --exclude="public/storage" \
-            --exclude="public/mix-manifest.json" \
+            --exclude="node_modules" \
+            --exclude="src" \
             --exclude="storage" \
             --exclude="vendor" \
             --exclude=".env*" \
+            --exclude=".babelrc" \
+            --exclude=".editorconfig" \
+            --exclude=".eslintrc.json" \
+            --exclude=".prettierrc" \
+            --exclude=".styleci.yml" \
+            --exclude="package.json" \
+            --exclude="package-lock.json" \
             --exclude="README.md" \
+            --exclude="tsconfig.json" \
             -e ssh . ${USER}@${HOST}:${DESTINATION}
