@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { PartialRouteObject } from 'react-router';
 import { useRoutes } from 'react-router-dom';
 import { Paths } from '../../constants/paths';
-import ArticleEditPage from '../pages/ArticleEditPage';
 import AsyncRoute from './AsyncRoute';
 import PrivateRoute from './PrivateRoute';
 
@@ -13,6 +12,7 @@ const ArticleDetailPage = React.lazy(
 const ArticleCreatePage = React.lazy(
   () => import('../pages/ArticleCreatePage'),
 );
+const ArticleEditPage = React.lazy(() => import('../pages/ArticleEditPage'));
 const UsersPage = React.lazy(() => import('../pages/UsersPage'));
 const UserDetailPage = React.lazy(() => import('../pages/UserDetailPage'));
 const CategoryArticlesPage = React.lazy(
