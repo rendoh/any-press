@@ -9,6 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Use Node.js 15
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15
+      - run: npm install
+      - run: npm run prod
       - name: Deploy
         env: 
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
@@ -27,7 +33,6 @@ jobs:
             --exclude=".vscode" \
             --exclude="node_modules" \
             --exclude="public/storage" \
-            --exclude="public/assets" \
             --exclude="public/mix-manifest.json" \
             --exclude="storage" \
             --exclude="vendor" \
