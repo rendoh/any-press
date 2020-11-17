@@ -12,7 +12,6 @@ import { Paths } from '../../constants/paths';
 import Field from '../form/Field';
 import MinimalForm from '../form/MinimalForm';
 import { useLogin } from '../../hooks/api/useLogin';
-import OverlayLoader from '../core/OverlayLoader';
 import SEO from '../core/SEO';
 
 const Login: FC = () => {
@@ -29,7 +28,7 @@ const Login: FC = () => {
   const { redirect } = useRedirectToStatePath();
   const { login } = useLogin({
     onSuccess() {
-      redirect();
+      requestAnimationFrame(redirect);
     },
     onError(errors) {
       errors.forEach(([key, message]) => {
@@ -76,6 +75,7 @@ const Login: FC = () => {
           appearance="primary"
           type="submit"
           disabled={isSubmitting}
+          loading={isSubmitting}
           block
           ripple={false}
         >
@@ -85,7 +85,6 @@ const Login: FC = () => {
           <Link to={Paths.register}>新規ユーザ登録</Link>
         </FormFooter>
       </MinimalForm>
-      {isSubmitting && <OverlayLoader />}
     </>
   );
 };

@@ -19,7 +19,7 @@ const ArticleDetailPage: FC = () => {
   const authenticateduser = useAuthenticatedUser();
 
   if (isLoading) {
-    return <OverlayLoader backdrop={false} />;
+    return <OverlayLoader />;
   }
   if (!article) {
     return (

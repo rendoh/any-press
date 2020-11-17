@@ -12,7 +12,6 @@ import { ValidationMessages } from '../../resources/messages';
 import CategorySelector from '../form/CategorySelector';
 import TagSelector from '../form/TagSelector';
 import WysiwygEditor from '../form/WysiwygEditor';
-import OverlayLoader from '../core/OverlayLoader';
 
 export type ArticleEditorErrorEntries = ErrorEntry<
   'title' | 'image' | 'content' | 'category_id' | 'tags' | 'public'
@@ -142,12 +141,12 @@ const ArticleEditor: FC<ArticleEditorProps> = ({
           type="submit"
           appearance="primary"
           disabled={isSubmitting}
+          loading={isSubmitting}
           ripple={false}
         >
           送信
         </Button>
       </form>
-      {isSubmitting && <OverlayLoader />}
     </>
   );
 };

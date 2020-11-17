@@ -12,7 +12,6 @@ import { ValidationMessages } from '../../resources/messages';
 import MinimalForm from '../form/MinimalForm';
 import Field from '../form/Field';
 import { useRegister } from '../../hooks/api/useRegister';
-import OverlayLoader from '../core/OverlayLoader';
 import SEO from '../core/SEO';
 
 const Register: FC = () => {
@@ -86,6 +85,7 @@ const Register: FC = () => {
           appearance="primary"
           type="submit"
           disabled={isSubmitting}
+          loading={isSubmitting}
           block
           ripple={false}
         >
@@ -95,7 +95,6 @@ const Register: FC = () => {
           <Link to={Paths.login}>ログイン</Link>
         </FormFooter>
       </MinimalForm>
-      {isSubmitting && <OverlayLoader />}
     </>
   );
 };

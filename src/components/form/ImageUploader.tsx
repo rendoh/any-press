@@ -36,7 +36,7 @@ const ImageUploader: FC<ImageUploaderProps> = ({
   });
   return (
     <Wrapper className={className}>
-      {isUploading && <OverlayLoader />}
+      {isUploading && <OverlayLoader backdrop />}
       <FileField
         name={name}
         type="file"

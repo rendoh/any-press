@@ -56,7 +56,7 @@ const WysiwygEditor: FC<WysiwygEditorProps> = ({ value, onChange }) => {
         }}
         onEditorChange={onChange}
       />
-      {isUploading && <OverlayLoader />}
+      {isUploading && <OverlayLoader backdrop />}
       <Global styles={globalStyle} />
     </>
   );

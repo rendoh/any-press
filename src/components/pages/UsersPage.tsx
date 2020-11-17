@@ -28,7 +28,7 @@ const UsersPage: FC = () => {
       <PageTitle>ユーザ一覧</PageTitle>
       <UserList userInfos={users} />
       {isLoading ? (
-        <OverlayLoader backdrop={false} />
+        <OverlayLoader />
       ) : (
         <Pagination pages={pageCount} activePage={page} onSelect={goto} />
       )}

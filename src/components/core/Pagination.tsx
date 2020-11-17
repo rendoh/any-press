@@ -23,6 +23,10 @@ const Pagination: FC<PaginationProps> = ({ activePage, pages, onSelect }) => {
     };
   }, []);
 
+  if (pages === 0) {
+    return null;
+  }
+
   return (
     <PaginationWrapper>
       <RsuitePagination

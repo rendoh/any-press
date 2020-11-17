@@ -35,7 +35,7 @@ const TagArticlesPage: FC = () => {
   };
 
   if (isTagLoading) {
-    return <OverlayLoader backdrop={false} />;
+    return <OverlayLoader />;
   }
   if (!tag) {
     return (
@@ -52,7 +52,7 @@ const TagArticlesPage: FC = () => {
       <PageTitle>{tag.name}</PageTitle>
       <ArticleList articles={articles} />
       {isArticleLoading ? (
-        <OverlayLoader backdrop={false} />
+        <OverlayLoader />
       ) : (
         <Pagination pages={pageCount} activePage={page} onSelect={goto} />
       )}

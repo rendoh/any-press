@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import styled from '@emotion/styled';
 import { useCreateArticle } from '../../hooks/api/useCreateArticle';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../constants/paths';

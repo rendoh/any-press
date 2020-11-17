@@ -35,7 +35,7 @@ const CategoryArticlesPage: FC = () => {
   };
 
   if (isCategoryLoading) {
-    return <OverlayLoader backdrop={false} />;
+    return <OverlayLoader />;
   }
   if (!category) {
     return (
@@ -52,7 +52,7 @@ const CategoryArticlesPage: FC = () => {
       <PageTitle>{category.name}</PageTitle>
       <ArticleList articles={articles} />
       {isArticleLoading ? (
-        <OverlayLoader backdrop={false} />
+        <OverlayLoader />
       ) : (
         <Pagination pages={pageCount} activePage={page} onSelect={goto} />
       )}

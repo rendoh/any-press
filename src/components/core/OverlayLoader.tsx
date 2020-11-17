@@ -6,7 +6,7 @@ type OverlayLoaderProps = {
   backdrop?: boolean;
 };
 
-const OverlayLoader: FC<OverlayLoaderProps> = ({ backdrop = true }) => (
+const OverlayLoader: FC<OverlayLoaderProps> = ({ backdrop }) => (
   <Icon backdrop={backdrop} center={!backdrop} />
 );
 

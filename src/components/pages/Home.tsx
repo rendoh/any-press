@@ -26,7 +26,7 @@ const Home: FC = () => {
       <SEO />
       <ArticleList articles={articles} />
       {isLoading ? (
-        <OverlayLoader backdrop={false} />
+        <OverlayLoader />
       ) : (
         <Pagination pages={pageCount} activePage={page} onSelect={goto} />
       )}

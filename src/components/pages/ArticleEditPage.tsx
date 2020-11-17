@@ -46,12 +46,12 @@ const ArticleEditPage: FC = () => {
 
   const { deleteArticle, isSubmitting } = useDeleteArticle({
     onSuccess() {
-      navigate(Paths.home);
+      navigate(Paths.accountArticles);
     },
   });
 
   if (isLoading) {
-    return <OverlayLoader backdrop={false} />;
+    return <OverlayLoader />;
   }
   if (!article) {
     return (
@@ -97,6 +97,8 @@ const ArticleEditPage: FC = () => {
           <Button
             onClick={() => deleteArticle(article.id)}
             appearance="primary"
+            disabled={isSubmitting}
+            loading={isSubmitting}
           >
             削除
           </Button>
@@ -105,7 +107,6 @@ const ArticleEditPage: FC = () => {
           </Button>
         </ModalFooter>
       </DeleteModal>
-      {isSubmitting && <OverlayLoader backdrop />}
     </>
   );
 };

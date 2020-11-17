@@ -88,12 +88,13 @@ const AccountSettings: FC = () => {
           type="submit"
           appearance="primary"
           disabled={isSubmitting || isLoading}
+          loading={isSubmitting}
           ripple={false}
         >
           更新
         </Button>
       </form>
-      {(isLoading || isSubmitting) && <OverlayLoader />}
+      {isLoading && <OverlayLoader />}
     </Wrapper>
   );
 };

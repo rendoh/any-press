@@ -36,7 +36,7 @@ const UserDetailPage: FC = () => {
   };
 
   if (isUserLoading) {
-    return <OverlayLoader backdrop={false} />;
+    return <OverlayLoader />;
   }
   if (!userInfo) {
     return (
