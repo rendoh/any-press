@@ -8,6 +8,6 @@ class TagService
 {
     public function getAll()
     {
-        return Tag::latest()->get();
+        return Tag::all();
     }
 }

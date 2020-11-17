@@ -8,6 +8,6 @@ class CategoryService
 {
     public function getAll()
     {
-        return Category::latest()->get();
+        return Category::all();
     }
 }
