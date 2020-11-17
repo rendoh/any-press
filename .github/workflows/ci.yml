@@ -13,19 +13,24 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 15
-      - run: npm install
-      - run: npm run prod
-      - name: Deploy
+      - name: Build SPA
+        run: |
+          npm install
+          npm run prod
+      - name: Setup SSH
         env: 
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          USER: ${{ secrets.USER }}
-          HOST: ${{ secrets.HOST }}
-          DESTINATION: ${{ secrets.DESTINATION }}
         run: |
           mkdir -p ~/.ssh
           echo "$SECRET_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+      - name: Deploy rsync
+        env: 
+          USER: ${{ secrets.USER }}
+          HOST: ${{ secrets.HOST }}
+          DESTINATION: ${{ secrets.DESTINATION }}
+        run: |
           rsync -av --delete --rsync-path="sudo rsync" \
             --exclude=".git*" \
             --exclude=".vscode" \
@@ -45,3 +50,20 @@ jobs:
             --exclude="README.md" \
             --exclude="tsconfig.json" \
             -e ssh . ${USER}@${HOST}:${DESTINATION}
+      - name: Deploy migration
+        env: 
+          USER: ${{ secrets.USER }}
+          HOST: ${{ secrets.HOST }}
+          DESTINATION: ${{ secrets.DESTINATION }}
+        run: |
+          ssh -i ~/.ssh/any-press.pem github@118.27.5.185 bash -c "'
+            cd /var/www/html/laravel
+            sudo php artisan migrate --force
+            sudo php artisan cache:clear
+            sudo php artisan config:clear
+            sudo php artisan route:clear
+            sudo php artisan view:clear
+            sudo php artisan config:cache
+            sudo php artisan route:cache
+            sudo php artisan view:cache
+          '"
