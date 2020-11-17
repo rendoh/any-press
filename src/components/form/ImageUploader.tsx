@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Icon, IconButton } from 'rsuite';
 import { IconNames } from 'rsuite/lib/Icon';
-import { useUpload } from '../../hooks/api/useUpload';
+import { uploadImage } from '../../api/upload';
+import { handleApiError } from '../../utils/handleApiError';
 import OverlayLoader from '../core/OverlayLoader';
 
 type ImageUploaderProps = {
@@ -24,16 +25,20 @@ const ImageUploader: FC<ImageUploaderProps> = ({
   name,
   icon = 'image',
 }) => {
-  const { upload, isUploading } = useUpload({
-    onSuccess(filePath) {
-      onSuccess(filePath);
-    },
-    onError() {
-      if (onError) {
-        onError();
-      }
-    },
-  });
+  const [isUploading, setIsUploading] = useState(false);
+  const handleUpload = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const { data } = await uploadImage(file);
+      onSuccess(data.file_path);
+    } catch (error: unknown) {
+      handleApiError(error);
+      if (onError) onError();
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <Wrapper className={className}>
       {isUploading && <OverlayLoader backdrop />}
@@ -42,7 +47,7 @@ const ImageUploader: FC<ImageUploaderProps> = ({
         type="file"
         onChange={(e) => {
           if (e.target.files?.length) {
-            upload(e.target.files[0]);
+            handleUpload(e.target.files[0]);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             e.target.value = null as any;
           }

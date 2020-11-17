@@ -1,22 +1,18 @@
 import React, { FC, useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArticleValues } from '../../api/article';
 import { Paths } from '../../constants/paths';
 import { useArticleDetail } from '../../hooks/api/useArticleDetail';
-import { useUpdateArticle } from '../../hooks/api/useUpdateArticle';
 import { useAuthenticatedUser } from '../../hooks/recoil/auth';
-import { ArticleDetail } from '../../types/article';
-import ArticleEditor, {
-  ArticleEditorErrorEntries,
-} from '../article/ArticleEditor';
+import ArticleEditor from '../article/ArticleEditor';
 import Forbidden from '../core/Forbidden';
 import NotFound from '../core/NotFound';
 import OverlayLoader from '../core/OverlayLoader';
 import SEO from '../core/SEO';
 import PageTitle from '../core/PageTitle';
-import { Button, Modal } from 'rsuite';
+import { Alert, Button, Modal } from 'rsuite';
 import styled from '@emotion/styled';
-import { useDeleteArticle } from '../../hooks/api/useDeleteArticle';
+import { deleteArticle } from '../../api/article';
+import { handleApiError } from '../../utils/handleApiError';
 
 const ArticleEditPage: FC = () => {
   const { id } = useParams();
@@ -24,17 +20,6 @@ const ArticleEditPage: FC = () => {
   const authenticateduser = useAuthenticatedUser();
 
   const navigate = useNavigate();
-  const [errorEntries, setErrorEntriess] = useState<
-    ArticleEditorErrorEntries
-  >();
-  const { updateArticle } = useUpdateArticle({
-    onSuccess(article) {
-      navigate(Paths.articleDetail(article.id));
-    },
-    onError(errors) {
-      setErrorEntriess(errors);
-    },
-  });
 
   const [isDeleteModalActive, setIsDeleteModalActive] = useState(false);
   const openDeleteModal = useCallback(() => {
@@ -44,12 +29,18 @@ const ArticleEditPage: FC = () => {
     setIsDeleteModalActive(false);
   }, []);
 
-  const { deleteArticle, isSubmitting } = useDeleteArticle({
-    onSuccess() {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const onDeleteClick = async (id: number) => {
+    setIsDeleting(true);
+    try {
+      await deleteArticle(Number(id));
+      Alert.success('記事を削除しました');
       navigate(Paths.accountArticles);
-    },
-  });
-
+    } catch (error: unknown) {
+      handleApiError(error);
+      setIsDeleting(false);
+    }
+  };
   if (isLoading) {
     return <OverlayLoader />;
   }
@@ -77,13 +68,7 @@ const ArticleEditPage: FC = () => {
         <PageTitle>記事編集</PageTitle>
         <DeleteButton onClick={openDeleteModal}>記事を削除</DeleteButton>
       </Header>
-      <ArticleEditor
-        defaultValues={convertArticleToFormValues(article)}
-        errorEntries={errorEntries}
-        onSubmit={(values) => {
-          return updateArticle(article.id, values);
-        }}
-      />
+      <ArticleEditor articleDetail={article} />
       <DeleteModal
         show={isDeleteModalActive}
         onHide={closeDeleteModal}
@@ -95,10 +80,10 @@ const ArticleEditPage: FC = () => {
         </Modal.Header>
         <ModalFooter>
           <Button
-            onClick={() => deleteArticle(article.id)}
+            onClick={() => onDeleteClick(article.id)}
             appearance="primary"
-            disabled={isSubmitting}
-            loading={isSubmitting}
+            disabled={isDeleting}
+            loading={isDeleting}
           >
             削除
           </Button>
@@ -112,22 +97,6 @@ const ArticleEditPage: FC = () => {
 };
 
 export default ArticleEditPage;
-
-const convertArticleToFormValues = ({
-  title,
-  image,
-  content,
-  category,
-  tags,
-  public: isPublic,
-}: ArticleDetail): ArticleValues => ({
-  title,
-  image,
-  content,
-  category_id: category.id,
-  tags: tags.map(({ id }) => id),
-  public: isPublic,
-});
 
 const Header = styled.header`
   display: flex;

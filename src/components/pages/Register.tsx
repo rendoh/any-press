@@ -5,14 +5,18 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { RegisterUserValues } from '../../api/user';
+import { registerUser, RegisterUserValues } from '../../api/user';
 import { Paths } from '../../constants/paths';
-import { useIsAuthenticated } from '../../hooks/recoil/auth';
+import {
+  useIsAuthenticated,
+  useSetAuthenticatedUser,
+} from '../../hooks/recoil/auth';
 import { ValidationMessages } from '../../resources/messages';
 import MinimalForm from '../form/MinimalForm';
 import Field from '../form/Field';
-import { useRegister } from '../../hooks/api/useRegister';
 import SEO from '../core/SEO';
+import { handleApiError } from '../../utils/handleApiError';
+import { ApiError } from '../../api/ApiError';
 
 const Register: FC = () => {
   const {
@@ -25,17 +29,29 @@ const Register: FC = () => {
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
   });
-  const { register: registerUser } = useRegister({
-    onError(errors) {
-      errors.forEach(([key, message]) => {
-        setError(key, {
-          message,
-        });
-      });
-    },
-  });
+
+  const setAuthenticatedUser = useSetAuthenticatedUser();
   const onSubmit: SubmitHandler<RegisterUserValues> = async (values) => {
-    return registerUser(values);
+    try {
+      const { data } = await registerUser(values);
+      setAuthenticatedUser(data);
+    } catch (error) {
+      handleApiError(error);
+      if (error instanceof ApiError) {
+        error
+          .getFieldErrorEntries([
+            'name',
+            'email',
+            'password',
+            'password_confirmation',
+          ])
+          .forEach(([key, message]) => {
+            setError(key, {
+              message,
+            });
+          });
+      }
+    }
   };
 
   const isAuthenticated = useIsAuthenticated();

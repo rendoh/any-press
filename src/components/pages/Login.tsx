@@ -6,13 +6,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ValidationMessages } from '../../resources/messages';
-import { LoginValues } from '../../api/auth';
-import { useIsAuthenticated } from '../../hooks/recoil/auth';
+import { login, LoginValues } from '../../api/auth';
+import {
+  useIsAuthenticated,
+  useSetAuthenticatedUser,
+} from '../../hooks/recoil/auth';
 import { Paths } from '../../constants/paths';
 import Field from '../form/Field';
 import MinimalForm from '../form/MinimalForm';
-import { useLogin } from '../../hooks/api/useLogin';
 import SEO from '../core/SEO';
+import { ApiError } from '../../api/ApiError';
+import { handleApiError } from '../../utils/handleApiError';
 
 const Login: FC = () => {
   const {
@@ -26,21 +30,24 @@ const Login: FC = () => {
     resolver: yupResolver(validationSchema),
   });
   const { redirect } = useRedirectToStatePath();
-  const { login } = useLogin({
-    onSuccess() {
-      requestAnimationFrame(redirect);
-    },
-    onError(errors) {
-      errors.forEach(([key, message]) => {
-        setError(key, {
-          message,
-        });
-      });
-    },
-  });
-
+  const setAuthenticatedUser = useSetAuthenticatedUser();
   const onSubmit: SubmitHandler<LoginValues> = async (values) => {
-    return login(values);
+    try {
+      const { data } = await login(values);
+      setAuthenticatedUser(data);
+      redirect();
+    } catch (error: unknown) {
+      handleApiError(error);
+      if (error instanceof ApiError) {
+        error
+          .getFieldErrorEntries(['email', 'password'])
+          .forEach(([key, message]) => {
+            setError(key, {
+              message,
+            });
+          });
+      }
+    }
   };
 
   const isAuthenticated = useIsAuthenticated();

@@ -4,15 +4,17 @@ import { Alert, Button, Input } from 'rsuite';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { UpdateUserValues } from '../../api/user';
+import { updateUser, UpdateUserValues } from '../../api/user';
 import { ValidationMessages } from '../../resources/messages';
 import Field from '../form/Field';
 import { useUserAccount } from '../../hooks/api/useUserAccount';
-import { useUpdateUser } from '../../hooks/api/useUpdateUser';
 import ImageUploader from '../form/ImageUploader';
 import OverlayLoader from '../core/OverlayLoader';
 import SEO from '../core/SEO';
 import PageTitle from '../core/PageTitle';
+import { useSetAuthenticatedUser } from '../../hooks/recoil/auth';
+import { handleApiError } from '../../utils/handleApiError';
+import { ApiError } from '../../api/ApiError';
 
 const AccountSettings: FC = () => {
   const {
@@ -29,22 +31,25 @@ const AccountSettings: FC = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const { updateUser } = useUpdateUser({
-    onSuccess(userAccount) {
+  const setAuthenticatedUser = useSetAuthenticatedUser();
+  const onSubmit: SubmitHandler<UpdateUserValues> = async (values) => {
+    try {
+      const { data } = await updateUser(values);
+      setAuthenticatedUser(data);
       reset(userAccount);
       Alert.success('アカウント情報を更新しました');
-    },
-    onError(errors) {
-      errors.forEach(([key, message]) => {
-        setError(key, {
-          message,
-        });
-      });
-    },
-  });
-
-  const onSubmit: SubmitHandler<UpdateUserValues> = async (values) => {
-    return updateUser(values);
+    } catch (error: unknown) {
+      handleApiError(error);
+      if (error instanceof ApiError) {
+        error
+          .getFieldErrorEntries(['name', 'email', 'avatar'])
+          .forEach(([key, message]) => {
+            setError(key, {
+              message,
+            });
+          });
+      }
+    }
   };
 
   const { userAccount, isLoading } = useUserAccount();

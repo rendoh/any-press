@@ -2,33 +2,26 @@ import React, { FC, useEffect } from 'react';
 import styled from '@emotion/styled';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button, Input, Toggle } from 'rsuite';
-import { ErrorEntry } from '../../api/ApiError';
-import { ArticleValues } from '../../api/article';
+import { ArticleValues, createArticle, updateArticle } from '../../api/article';
 import Field from '../form/Field';
 import ImageUploader from '../form/ImageUploader';
 import { ValidationMessages } from '../../resources/messages';
 import CategorySelector from '../form/CategorySelector';
 import TagSelector from '../form/TagSelector';
 import WysiwygEditor from '../form/WysiwygEditor';
+import { ArticleDetail } from '../../types/article';
+import { handleApiError } from '../../utils/handleApiError';
+import { ApiError } from '../../api/ApiError';
+import { Paths } from '../../constants/paths';
+import { useNavigate } from 'react-router-dom';
 
-export type ArticleEditorErrorEntries = ErrorEntry<
-  'title' | 'image' | 'content' | 'category_id' | 'tags' | 'public'
->[];
 export type ArticleEditorProps = {
-  defaultValues?: ArticleValues;
-  errorEntries?: ArticleEditorErrorEntries;
-  onSubmit: (values: ArticleValues) => Promise<void>;
+  articleDetail?: ArticleDetail;
 };
-const ArticleEditor: FC<ArticleEditorProps> = ({
-  onSubmit,
-  errorEntries,
-  defaultValues = {
-    tags: [],
-    public: true,
-  },
-}) => {
+
+const ArticleEditor: FC<ArticleEditorProps> = ({ articleDetail }) => {
   const {
     register,
     handleSubmit,
@@ -40,13 +33,16 @@ const ArticleEditor: FC<ArticleEditorProps> = ({
   } = useForm<ArticleValues>({
     mode: 'onTouched',
     resolver: yupResolver(validationSchema),
-    defaultValues,
+    defaultValues: articleDetail
+      ? convertArticleToFormValues(articleDetail)
+      : {},
   });
   const selectedCategoryId = watch('category_id');
   const selectedTagIds = watch('tags');
   const image = watch('image');
   const content = watch('content');
   const isPublic = watch('public');
+
   useEffect(() => {
     register({ name: 'tags' });
     register({ name: 'category_id' });
@@ -55,21 +51,38 @@ const ArticleEditor: FC<ArticleEditorProps> = ({
     register({ name: 'public' });
   }, [register]);
 
-  useEffect(() => {
-    if (errorEntries) {
-      errorEntries.forEach(([key, message]) => {
-        if (key === 'tags') {
-          setError('tags.0', {
-            message,
+  const navigate = useNavigate();
+  const onSubmit: SubmitHandler<ArticleValues> = async (values) => {
+    try {
+      const { data } = await (articleDetail
+        ? updateArticle(articleDetail.id, values)
+        : createArticle(values));
+      navigate(Paths.articleDetail(data.id));
+    } catch (error: unknown) {
+      handleApiError(error);
+      if (error instanceof ApiError) {
+        error
+          .getFieldErrorEntries([
+            'title',
+            'image',
+            'content',
+            'category_id',
+            'tags',
+          ])
+          .forEach(([key, message]) => {
+            if (key === 'tags') {
+              setError('tags.0', {
+                message,
+              });
+            } else {
+              setError(key, {
+                message,
+              });
+            }
           });
-        } else {
-          setError(key, {
-            message,
-          });
-        }
-      });
+      }
     }
-  }, [errorEntries, setError]);
+  };
 
   return (
     <>
@@ -152,6 +165,22 @@ const ArticleEditor: FC<ArticleEditorProps> = ({
 };
 
 export default ArticleEditor;
+
+const convertArticleToFormValues = ({
+  title,
+  image,
+  content,
+  category,
+  tags,
+  public: isPublic,
+}: ArticleDetail): ArticleValues => ({
+  title,
+  image,
+  content,
+  category_id: category.id,
+  tags: tags.map(({ id }) => id),
+  public: isPublic,
+});
 
 const validationSchema = Yup.object().shape<ArticleValues>({
   title: Yup.string().required(ValidationMessages.required),

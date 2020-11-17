@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import tinymce from 'tinymce/tinymce';
 import 'tinymce/icons/default';
@@ -6,9 +6,10 @@ import 'tinymce/themes/silver';
 import 'tinymce/plugins/image';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/link';
-import { useUpload } from '../../hooks/api/useUpload';
 import { css, Global } from '@emotion/core';
 import OverlayLoader from '../core/OverlayLoader';
+import { uploadImage } from '../../api/upload';
+import { handleApiError } from '../../utils/handleApiError';
 
 require.context(
   '!file-loader?name=assets/[path][name].[ext]&context=node_modules/tinymce!tinymce/skins',
@@ -26,7 +27,19 @@ type WysiwygEditorProps = {
 };
 
 const WysiwygEditor: FC<WysiwygEditorProps> = ({ value, onChange }) => {
-  const { upload, isUploading } = useUpload();
+  const [isUploading, setIsUploading] = useState(false);
+  const handleUpload = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const { data } = await uploadImage(file);
+      return data.file_path;
+    } catch (error: unknown) {
+      handleApiError(error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <>
       <Editor
@@ -45,8 +58,10 @@ const WysiwygEditor: FC<WysiwygEditorProps> = ({ value, onChange }) => {
             input.setAttribute('accept', 'image/*');
             input.onchange = async () => {
               if (!input.files?.length) return;
-              const filePath = await upload(input.files[0]);
-              callback(filePath);
+              const filePath = await handleUpload(input.files[0]);
+              if (filePath) {
+                callback(filePath);
+              }
             };
             input.click();
           },
