@@ -11,15 +11,18 @@
 - [x] Recoil を使ってみる（脱 Redux & Redux Saga）
 - [ ] React のテストを Enzyme の代わりに testing-library を使ってみる
 - [x] OGP だけ Blade で SSR
+- [ ] GitHub Actions
 
 ## Laravel
 
 ### setup
 
 ```bash
-$ php artisan migrate
+$ php artisan storage:link
 $ php artisan db:seed --class=FakeDataSeeder
 ```
+
+※マイグレーションやパッケージのインストールは省略
 
 ## 認証
 
