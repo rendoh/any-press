@@ -16,21 +16,19 @@ const UsersPage: FC = () => {
     setSearchParams({
       page: number.toString(),
     });
-    document.body.scrollIntoView({
-      behavior: 'auto',
-      block: 'start',
-    });
   };
 
   return (
     <div>
       <SEO title="ユーザ一覧" />
       <PageTitle>ユーザ一覧</PageTitle>
-      <UserList userInfos={users} />
       {isLoading ? (
         <OverlayLoader />
       ) : (
-        <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        <>
+          <UserList userInfos={users} />
+          <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        </>
       )}
     </div>
   );

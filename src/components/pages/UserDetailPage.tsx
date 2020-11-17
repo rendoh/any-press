@@ -29,10 +29,6 @@ const UserDetailPage: FC = () => {
     setSearchParams({
       page: number.toString(),
     });
-    document.body.scrollIntoView({
-      behavior: 'auto',
-      block: 'start',
-    });
   };
 
   if (isUserLoading) {
@@ -53,11 +49,13 @@ const UserDetailPage: FC = () => {
         <Avatar avatar={userInfo.avatar} size="lg" />
         <Name>{userInfo.name}</Name>
       </Header>
-      <ArticleList articles={articles} />
       {isArticleLoading ? (
         <OverlayLoader backdrop={false} />
       ) : (
-        <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        <>
+          <ArticleList articles={articles} />
+          <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        </>
       )}
     </>
   );

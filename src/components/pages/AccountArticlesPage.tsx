@@ -16,20 +16,18 @@ const AccountArticlesPage: FC = () => {
     setSearchParams({
       page: number.toString(),
     });
-    document.body.scrollIntoView({
-      behavior: 'auto',
-      block: 'start',
-    });
   };
   return (
     <>
       <SEO title="投稿した記事一覧" />
       <PageTitle>投稿した記事一覧</PageTitle>
-      <ArticleList articles={articles} />
       {isLoading ? (
         <OverlayLoader />
       ) : (
-        <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        <>
+          <ArticleList articles={articles} emptyText="まだ投稿していません" />
+          <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        </>
       )}
     </>
   );

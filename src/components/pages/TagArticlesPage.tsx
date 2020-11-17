@@ -28,10 +28,6 @@ const TagArticlesPage: FC = () => {
     setSearchParams({
       page: number.toString(),
     });
-    document.body.scrollIntoView({
-      behavior: 'auto',
-      block: 'start',
-    });
   };
 
   if (isTagLoading) {
@@ -50,11 +46,13 @@ const TagArticlesPage: FC = () => {
     <>
       <SEO title={tag.name} />
       <PageTitle>{tag.name}</PageTitle>
-      <ArticleList articles={articles} />
       {isArticleLoading ? (
         <OverlayLoader />
       ) : (
-        <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        <>
+          <ArticleList articles={articles} />
+          <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        </>
       )}
     </>
   );

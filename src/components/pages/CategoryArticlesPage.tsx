@@ -28,10 +28,6 @@ const CategoryArticlesPage: FC = () => {
     setSearchParams({
       page: number.toString(),
     });
-    document.body.scrollIntoView({
-      behavior: 'auto',
-      block: 'start',
-    });
   };
 
   if (isCategoryLoading) {
@@ -50,11 +46,13 @@ const CategoryArticlesPage: FC = () => {
     <>
       <SEO title={category.name} />
       <PageTitle>{category.name}</PageTitle>
-      <ArticleList articles={articles} />
       {isArticleLoading ? (
         <OverlayLoader />
       ) : (
-        <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        <>
+          <ArticleList articles={articles} />
+          <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        </>
       )}
     </>
   );

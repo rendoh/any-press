@@ -15,20 +15,18 @@ const Home: FC = () => {
     setSearchParams({
       page: number.toString(),
     });
-    document.body.scrollIntoView({
-      behavior: 'auto',
-      block: 'start',
-    });
   };
 
   return (
     <>
       <SEO />
-      <ArticleList articles={articles} />
       {isLoading ? (
         <OverlayLoader />
       ) : (
-        <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        <>
+          <ArticleList articles={articles} />
+          <Pagination pages={pageCount} activePage={page} onSelect={goto} />
+        </>
       )}
     </>
   );
