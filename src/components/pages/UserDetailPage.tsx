@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import React, { FC } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useUserInfo } from '../../hooks/api/useUserInfo';
-import { useUserArticles } from '../../hooks/api/useUserArticles';
+import { useUserInfo } from '../../hooks/queries/useUserInfo';
+import { useUserArticles } from '../../hooks/queries/useUserArticles';
 import Avatar from '../core/Avatar';
 import NotFound from '../core/NotFound';
 import OverlayLoader from '../core/OverlayLoader';

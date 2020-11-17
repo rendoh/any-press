@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from '@emotion/styled';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Tag } from 'rsuite';
-import { useArticleDetail } from '../../hooks/api/useArticleDetail';
+import { useArticleDetail } from '../../hooks/queries/useArticleDetail';
 import { formatISOString } from '../../utils/formatters';
 import Avatar from '../core/Avatar';
 import NotFound from '../core/NotFound';

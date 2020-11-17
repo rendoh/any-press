@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useTag } from '../../hooks/api/useTag';
-import { useTagArticles } from '../../hooks/api/useTagArticles';
+import { useTag } from '../../hooks/queries/useTag';
+import { useTagArticles } from '../../hooks/queries/useTagArticles';
 import ArticleList from '../article/ArticleList';
 import NotFound from '../core/NotFound';
 import OverlayLoader from '../core/OverlayLoader';

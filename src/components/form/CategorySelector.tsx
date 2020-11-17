@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React, { FC, useMemo } from 'react';
 import { Icon, SelectPicker } from 'rsuite';
 import { FormControlPickerProps } from 'rsuite/lib/@types/common';
-import { useCategories } from '../../hooks/api/useCategories';
+import { useCategories } from '../../hooks/queries/useCategories';
 import { convertToOptions, Option } from '../../utils/options';
 
 type CategorySelectorProps = Pick<

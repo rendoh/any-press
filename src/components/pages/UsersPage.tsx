@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useUsers } from '../../hooks/api/useUsers';
+import { useUsers } from '../../hooks/queries/useUsers';
 import OverlayLoader from '../core/OverlayLoader';
 import PageTitle from '../core/PageTitle';
 import Pagination from '../core/Pagination';

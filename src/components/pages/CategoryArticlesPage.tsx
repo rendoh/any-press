@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useCategory } from '../../hooks/api/useCategory';
-import { useCategoryArticles } from '../../hooks/api/useCategoryArticles';
+import { useCategory } from '../../hooks/queries/useCategory';
+import { useCategoryArticles } from '../../hooks/queries/useCategoryArticles';
 import ArticleList from '../article/ArticleList';
 import NotFound from '../core/NotFound';
 import OverlayLoader from '../core/OverlayLoader';

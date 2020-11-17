@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Paths } from '../../constants/paths';
-import { useArticleDetail } from '../../hooks/api/useArticleDetail';
+import { useArticleDetail } from '../../hooks/queries/useArticleDetail';
 import { useAuthenticatedUser } from '../../hooks/recoil/auth';
 import ArticleEditor from '../article/ArticleEditor';
 import Forbidden from '../core/Forbidden';

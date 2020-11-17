@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React, { FC, useMemo } from 'react';
 import { CheckPicker, Icon } from 'rsuite';
 import { FormControlPickerProps } from 'rsuite/lib/@types/common';
-import { useTags } from '../../hooks/api/useTags';
+import { useTags } from '../../hooks/queries/useTags';
 import { convertToOptions, Option } from '../../utils/options';
 
 type TagSelectorProps = Pick<FormControlPickerProps<number[]>, 'onChange'> & {

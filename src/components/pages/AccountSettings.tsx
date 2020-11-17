@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { updateUser, UpdateUserValues } from '../../api/user';
 import { ValidationMessages } from '../../resources/messages';
 import Field from '../form/Field';
-import { useUserAccount } from '../../hooks/api/useUserAccount';
+import { useUserAccount } from '../../hooks/queries/useUserAccount';
 import ImageUploader from '../form/ImageUploader';
 import OverlayLoader from '../core/OverlayLoader';
 import SEO from '../core/SEO';
