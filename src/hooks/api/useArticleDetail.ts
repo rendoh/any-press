@@ -13,7 +13,7 @@ export function useArticleDetail(id: number) {
         setArticleDetail(data);
       })
       .catch((error: unknown) => {
-        handleApiError(error, true);
+        handleApiError(error);
       })
       .finally(() => {
         setIsLoading(false);

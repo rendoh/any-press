@@ -13,7 +13,7 @@ export function useTag(slug: string) {
         setTag(data);
       })
       .catch((error: unknown) => {
-        handleApiError(error, true);
+        handleApiError(error);
       })
       .finally(() => {
         setIsLoading(false);

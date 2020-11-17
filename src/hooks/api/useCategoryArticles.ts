@@ -21,7 +21,7 @@ export function useCategoryArticles(
         setTotal(data.total);
       })
       .catch((error: unknown) => {
-        handleApiError(error, true);
+        handleApiError(error);
       })
       .finally(() => {
         setIsLoading(false);

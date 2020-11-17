@@ -18,7 +18,7 @@ export function useTagArticles(slug: string, { page }: ArticlesParams = {}) {
         setTotal(data.total);
       })
       .catch((error: unknown) => {
-        handleApiError(error, true);
+        handleApiError(error);
       })
       .finally(() => {
         setIsLoading(false);

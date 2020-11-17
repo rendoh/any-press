@@ -13,7 +13,7 @@ export function useUserInfo(id: number) {
         setUserInfo(data);
       })
       .catch((error: unknown) => {
-        handleApiError(error, true);
+        handleApiError(error);
       })
       .finally(() => {
         setIsLoading(false);

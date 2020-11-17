@@ -1,11 +1,15 @@
 import { Alert } from 'rsuite';
 import { ApiError } from '../api/ApiError';
 
-export function handleApiError(error: unknown, ignore404 = false) {
+export function handleApiError(error: unknown) {
   let errors: string[] = [];
   if (error instanceof ApiError) {
-    if (ignore404 && error.status === 404) {
-      return;
+    if (error.status === 404) {
+      errors.push('見つかりませんでした');
+    } else if (error.status === 401) {
+      errors.push('認証が必要です');
+    } else if (error.status === 403) {
+      errors.push('権限がありません');
     }
 
     errors = error.getFieldErrorMessages();

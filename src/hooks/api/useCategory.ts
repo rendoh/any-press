@@ -13,7 +13,7 @@ export function useCategory(slug: string) {
         setCategory(data);
       })
       .catch((error: unknown) => {
-        handleApiError(error, true);
+        handleApiError(error);
       })
       .finally(() => {
         setIsLoading(false);
