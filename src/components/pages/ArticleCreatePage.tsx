@@ -7,6 +7,7 @@ import ArticleEditor, {
   ArticleEditorErrorEntries,
 } from '../article/ArticleEditor';
 import SEO from '../core/SEO';
+import PageTitle from '../core/PageTitle';
 
 const ArticleCreatePage: FC = () => {
   const navigate = useNavigate();
@@ -27,16 +28,10 @@ const ArticleCreatePage: FC = () => {
   return (
     <>
       <SEO title="新規記事作成" />
-      <Heading>新規記事作成</Heading>
+      <PageTitle>新規記事作成</PageTitle>
       <ArticleEditor onSubmit={createArticle} errorEntries={errorEntries} />
     </>
   );
 };
 
 export default ArticleCreatePage;
-
-const Heading = styled.h1`
-  font-size: 20px;
-  line-height: 1.5;
-  margin-bottom: 25px;
-`;
