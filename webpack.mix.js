@@ -15,12 +15,13 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 mix
   .react('src/app.tsx', 'public/assets')
+  .version()
   .options({
     postCss: [require('autoprefixer')],
   })
   .webpackConfig({
     output: {
-      chunkFilename: 'assets/[id].js',
+      chunkFilename: 'assets/[id].[contenthash].js',
     },
     module: {
       rules: [
