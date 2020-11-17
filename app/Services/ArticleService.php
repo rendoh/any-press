@@ -48,7 +48,9 @@ class ArticleService
     {
         $data = array_merge($data, ['user_id' => $user->id]);
         $article = Article::create($data);
-        $article->tags()->attach($data['tags']);
+        if (isset($data['tags'])) {
+            $article->tags()->attach($data['tags']);
+        }
 
         return $article;
     }
