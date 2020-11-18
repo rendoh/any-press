@@ -36,7 +36,7 @@ const AccountSettings: FC = () => {
     try {
       const { data } = await updateUser(values);
       setAuthenticatedUser(data);
-      reset(userAccount);
+      reset(data);
       Alert.success('アカウント情報を更新しました');
     } catch (error: unknown) {
       handleApiError(error);
