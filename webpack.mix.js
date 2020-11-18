@@ -15,7 +15,6 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 mix
   .react('src/app.tsx', 'public/assets')
-  .version()
   .options({
     postCss: [require('autoprefixer')],
   })
@@ -53,3 +52,7 @@ mix
       // new BundleAnalyzerPlugin()
     ],
   });
+
+if (mix.inProduction()) {
+  mix.version();
+}
