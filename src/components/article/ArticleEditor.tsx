@@ -35,7 +35,7 @@ const ArticleEditor: FC<ArticleEditorProps> = ({ articleDetail }) => {
     resolver: yupResolver(validationSchema),
     defaultValues: articleDetail
       ? convertArticleToFormValues(articleDetail)
-      : {},
+      : { public: true },
   });
   const selectedCategoryId = watch('category_id');
   const selectedTagIds = watch('tags');
