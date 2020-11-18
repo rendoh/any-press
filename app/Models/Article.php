@@ -55,6 +55,7 @@ class Article extends Model
     public function setContentAttribute($value)
     {
         $config = HTMLPurifier_Config::createDefault();
+        $config->set('Cache.SerializerPath', storage_path('app/cache'));
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($value);
         $this->attributes['content'] = $clean_html;
