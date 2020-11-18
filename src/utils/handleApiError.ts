@@ -10,9 +10,9 @@ export function handleApiError(error: unknown) {
       errors.push('認証が必要です');
     } else if (error.status === 403) {
       errors.push('権限がありません');
+    } else {
+      errors = error.getFieldErrorMessages();
     }
-
-    errors = error.getFieldErrorMessages();
   }
   if (errors.length === 0) {
     errors.push('エラーが発生しました');
