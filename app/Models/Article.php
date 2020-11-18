@@ -89,4 +89,11 @@ class Article extends Model
     {
         return $this->load(self::RELATIONS);
     }
+
+    public function scopePagination($query, $count = 10)
+    {
+        return $query->withRelations()
+            ->latest()
+            ->paginate($count);
+    }
 }

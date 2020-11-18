@@ -9,53 +9,41 @@ use App\Models\Tag;
 
 class ArticleRepository
 {
-    const PAGINATE_COUNT = 10;
-
     public function paginate()
     {
-        return Article::withRelations()
-            ->public()
-            ->latest()
-            ->paginate(self::PAGINATE_COUNT);
+        return Article::public()
+            ->pagination();
     }
 
     public function paginateByUser(User $user)
     {
         return $user
             ->articles()
-            ->withRelations()
             ->public()
-            ->latest()
-            ->paginate(self::PAGINATE_COUNT);
+            ->pagination();
     }
 
     public function paginateByCategory(Category $category)
     {
         return $category
             ->articles()
-            ->withRelations()
             ->public()
-            ->latest()
-            ->paginate(self::PAGINATE_COUNT);
+            ->pagination();
     }
 
     public function paginateByTag(Tag $tag)
     {
         return $tag
             ->articles()
-            ->withRelations()
             ->public()
-            ->latest()
-            ->paginate(self::PAGINATE_COUNT);
+            ->pagination();
     }
 
     public function paginateMyArticles(User $user)
     {
         return $user
             ->articles()
-            ->withRelations()
-            ->latest()
-            ->paginate(self::PAGINATE_COUNT);
+            ->pagination();
     }
 
     public function loadDetail(Article $article): Article
