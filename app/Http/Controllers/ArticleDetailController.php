@@ -12,7 +12,7 @@ class ArticleDetailController extends Controller
             'title' => $article->title,
             'description' => $article->excerpt,
             'type' => 'article',
-            'image' => $article->image ?? null,
+            'image' => $article->image ? url($article->image) : null,
             'pathname' => "/articles/$article->id",
         ]);
     }
