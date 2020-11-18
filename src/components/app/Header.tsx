@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { logout } from '../../api/auth';
-import { Dropdown, Nav, Navbar } from 'rsuite';
+import { Dropdown, Icon, IconButton, Nav, Navbar } from 'rsuite';
 
 import {
   useAuthenticatedUser,
@@ -11,6 +11,7 @@ import {
 import { Paths } from '../../constants/paths';
 import Avatar from '../core/Avatar';
 import { css, Global } from '@emotion/core';
+import DrawerMenu from './DrawerMenu';
 
 const Header: FC = () => {
   const authenticatedUser = useAuthenticatedUser();
@@ -20,53 +21,65 @@ const Header: FC = () => {
     setAuthenticatedUser(null);
   };
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const openMenu = () => setIsMenuOpen(true);
+  const closeMenu = () => setIsMenuOpen(false);
+
+  const location = useLocation();
+  React.useEffect(closeMenu, [location]);
+
   return (
-    <Root appearance="inverse">
-      <Global styles={globalStyle} />
-      <Navbar.Header>
-        <Logo to={Paths.home}>HOME</Logo>
-      </Navbar.Header>
-      <Navbar.Body>
-        <Nav>
-          <Nav.Item componentClass={Link} to={Paths.users}>
-            ユーザ一覧
-          </Nav.Item>
-        </Nav>
-        <Nav pullRight>
-          {authenticatedUser ? (
-            <AvatarDropdown
-              title={
-                <AvatarRow>
-                  <AvatarRowImage avatar={authenticatedUser.avatar} />
-                  {authenticatedUser.name}
-                </AvatarRow>
-              }
-              trigger={['hover', 'click']}
-              placement="bottomEnd"
-            >
-              <Dropdown.Item componentClass={Link} to={Paths.accountSettings}>
-                アカウント編集
-              </Dropdown.Item>
-              <Dropdown.Item componentClass={Link} to={Paths.accountArticles}>
-                投稿した記事一覧
-              </Dropdown.Item>
-              <Dropdown.Item onSelect={handleLogoutClick}>
-                ログアウト
-              </Dropdown.Item>
-            </AvatarDropdown>
-          ) : (
-            <>
-              <Nav.Item componentClass={Link} to={Paths.register}>
-                ユーザ登録
-              </Nav.Item>
-              <Nav.Item componentClass={Link} to={Paths.login}>
-                ログイン
-              </Nav.Item>
-            </>
-          )}
-        </Nav>
-      </Navbar.Body>
-    </Root>
+    <>
+      <Root appearance="inverse">
+        <Global styles={globalStyle} />
+        <Navbar.Header>
+          <MenuButton
+            onClick={openMenu}
+            icon={<Icon icon="bars" />}
+            appearance="primary"
+            circle
+          />
+          <Logo to={Paths.home}>AnyPress</Logo>
+        </Navbar.Header>
+        <Navbar.Body>
+          <Nav pullRight>
+            {authenticatedUser ? (
+              <AvatarDropdown
+                title={
+                  <AvatarRow>
+                    <AvatarRowImage avatar={authenticatedUser.avatar} />
+                    {authenticatedUser.name}
+                  </AvatarRow>
+                }
+                trigger={['hover', 'click']}
+                placement="bottomEnd"
+              >
+                <Dropdown.Item componentClass={Link} to={Paths.accountSettings}>
+                  アカウント編集
+                </Dropdown.Item>
+                <Dropdown.Item componentClass={Link} to={Paths.accountArticles}>
+                  投稿した記事一覧
+                </Dropdown.Item>
+                <Dropdown.Item onSelect={handleLogoutClick}>
+                  ログアウト
+                </Dropdown.Item>
+              </AvatarDropdown>
+            ) : (
+              <>
+                <Nav.Item componentClass={Link} to={Paths.register}>
+                  ユーザ登録
+                </Nav.Item>
+                <Nav.Item componentClass={Link} to={Paths.login}>
+                  ログイン
+                </Nav.Item>
+              </>
+            )}
+          </Nav>
+        </Navbar.Body>
+      </Root>
+      <DrawerMenu show={isMenuOpen} onHide={closeMenu} />
+    </>
   );
 };
 
@@ -86,13 +99,17 @@ const Root = styled(Navbar)`
   left: 0;
 `;
 
+const MenuButton = styled(IconButton)`
+  margin-left: 10px;
+`;
+
 const Logo = styled(Link)`
   font-weight: bold;
   text-decoration: none;
   display: inline-flex;
   height: 100%;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 10px;
 `;
 
 const AvatarDropdown = styled(Dropdown)`
