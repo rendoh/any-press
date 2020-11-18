@@ -4,7 +4,11 @@ import { apiClient } from './client';
 
 export type ArticlesParams = PaginationParams;
 
-export async function fetchArticles(params?: ArticlesParams) {
+export type SearchArticleParams = ArticlesParams & {
+  search?: string;
+};
+
+export async function fetchArticles(params?: SearchArticleParams) {
   return apiClient.get<PaginationResponse<Article>>('/articles', {
     params,
   });

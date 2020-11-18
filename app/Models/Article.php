@@ -96,4 +96,11 @@ class Article extends Model
             ->latest()
             ->paginate($count);
     }
+
+    public function scopeSearch($query, $input = null)
+    {
+        return $query->when($input, function ($query, $input) {
+            $query->where('content', 'like', "%$input%");
+        });
+    }
 }

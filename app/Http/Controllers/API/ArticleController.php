@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Tag;
 use App\Http\Requests\StoreArticleRequest;
 use App\Repositories\Article\ArticleRepository;
+use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
@@ -19,9 +20,9 @@ class ArticleController extends Controller
         $this->articles = $articles;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return $this->articles->paginate();
+        return $this->articles->paginate($request->search);
     }
 
     public function indexByUser(User $user)

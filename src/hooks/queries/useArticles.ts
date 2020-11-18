@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { fetchArticles, ArticlesParams } from '../../api/article';
+import { fetchArticles, SearchArticleParams } from '../../api/article';
 import { Article } from '../../types/article';
 import { handleApiError } from '../../utils/handleApiError';
 
-export function useArticles({ page }: ArticlesParams = {}) {
+export function useArticles({ page, search }: SearchArticleParams = {}) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [perPage, setPerPage] = useState(0);
@@ -11,7 +11,7 @@ export function useArticles({ page }: ArticlesParams = {}) {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchArticles({ page })
+    fetchArticles({ page, search })
       .then(({ data }) => {
         setArticles(data.data);
         setPerPage(data.per_page);
@@ -21,7 +21,7 @@ export function useArticles({ page }: ArticlesParams = {}) {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [page]);
+  }, [page, search]);
 
   return {
     articles,

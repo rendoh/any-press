@@ -9,9 +9,10 @@ use App\Models\Tag;
 
 class ArticleRepository
 {
-    public function paginate()
+    public function paginate(?string $input)
     {
         return Article::public()
+            ->search($input)
             ->pagination();
     }
 
