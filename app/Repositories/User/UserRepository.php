@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Repositories\User;
 
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Illuminate\Http\UploadedFile;
 
-class UserService
+class UserRepository
 {
     public function paginate()
     {
@@ -15,10 +13,14 @@ class UserService
             ->paginate(10);
     }
 
-    public function getInfo($id)
+    public function load(User $user): User
     {
-        return User::withCount('articles')
-            ->findOrFail($id);
+        return $user->loadCount('articles');
+    }
+
+    public function loadEmail(User $user): User
+    {
+        return $user->makeVisible('email');
     }
 
     public function create(array $data): User
@@ -37,10 +39,5 @@ class UserService
         $user->avatar = $data['avatar'];
         $user->save();
         return $user;
-    }
-
-    public function getAsAccount(User $user): User
-    {
-        return $user->makeVisible('email');
     }
 }

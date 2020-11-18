@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Services\TagService;
+use App\Repositories\Tag\TagRepository;
 use App\Models\Tag;
 
 class TagController extends Controller
 {
-    private TagService $tagService;
+    private TagRepository $tags;
 
-    public function __construct(TagService $tagService)
+    public function __construct(TagRepository $tags)
     {
-        $this->tagService = $tagService;
+        $this->tags = $tags;
     }
 
     public function index()
     {
-        return $this->tagService->getAll();
+        return $this->tags->getAll();
     }
 
     public function show(Tag $tag)

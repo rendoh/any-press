@@ -75,6 +75,11 @@ class Article extends Model
         return $this->belongsToMany(Tag::class);
     }
 
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
+    }
+
     public function scopeWithRelations($query)
     {
         return $query->with(self::RELATIONS);
@@ -83,19 +88,5 @@ class Article extends Model
     public function loadWithRelations()
     {
         return $this->load(self::RELATIONS);
-    }
-
-    public function scopePublic($query)
-    {
-        return $query->where('public', true);
-    }
-
-    public function scopeAsPagination($query, $count = 10)
-    {
-        return $query
-            ->withRelations()
-            ->public()
-            ->latest()
-            ->paginate($count);
     }
 }

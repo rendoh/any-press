@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Services\CategoryService;
+use App\Repositories\Category\CategoryRepository;
 use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    private CategoryService $categoryService;
+    private CategoryRepository $categories;
 
-    public function __construct(CategoryService $categoryService)
+    public function __construct(CategoryRepository $categories)
     {
-        $this->categoryService = $categoryService;
+        $this->categories = $categories;
     }
 
     public function index()
     {
-        return $this->categoryService->getAll();
+        return $this->categories->getAll();
     }
 
     public function show(Category $category)

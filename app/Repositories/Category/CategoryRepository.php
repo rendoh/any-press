@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Repositories\Category;
 
 use App\Models\Category;
 
-class CategoryService
+class CategoryRepository
 {
     public function getAll()
     {

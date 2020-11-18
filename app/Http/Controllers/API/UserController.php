@@ -3,29 +3,30 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Repositories\User\UserRepository;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    private UserService $userService;
+    private UserRepository $users;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserRepository $users)
     {
-        $this->userService = $userService;
+        $this->users = $users;
     }
 
     public function index()
     {
-        return $this->userService->paginate();
+        return $this->users->paginate();
     }
 
     public function store(CreateUserRequest $request)
     {
-        $user = $this->userService->create($request->validated());
+        $user = $this->users->create($request->validated());
         event(new Registered($user));
         Auth::login($user);
 
@@ -35,20 +36,20 @@ class UserController extends Controller
     public function account()
     {
         $user = auth()->user();
-        $account = $this->userService->getAsAccount($user);
+        $account = $this->users->loadEmail($user);
         return response()->json($account);
     }
 
     public function update(UpdateUserRequest $request)
     {
         $user = auth()->user();
-        $updatedUser = $this->userService->update($user, $request->validated());
-        $account = $this->userService->getAsAccount($updatedUser);
+        $updatedUser = $this->users->update($user, $request->validated());
+        $account = $this->users->loadEmail($updatedUser);
         return response()->json($account);
     }
 
-    public function show($id)
+    public function show(User $user)
     {
-        return $this->userService->getInfo($id);
+        return $this->users->load($user);
     }
 }

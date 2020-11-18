@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Repositories\Tag;
 
 use App\Models\Tag;
 
-class TagService
+class TagRepository
 {
     public function getAll()
     {

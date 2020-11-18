@@ -1,38 +1,52 @@
 <?php
 
-namespace App\Services;
+namespace App\Repositories\Article;
 
 use App\Models\Article;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Tag;
 
-class ArticleService
+class ArticleRepository
 {
+    const PAGINATE_COUNT = 10;
+
     public function paginate()
     {
-        return Article::asPagination();
+        return Article::withRelations()
+            ->public()
+            ->latest()
+            ->paginate(self::PAGINATE_COUNT);
     }
 
     public function paginateByUser(User $user)
     {
         return $user
             ->articles()
-            ->asPagination();
+            ->withRelations()
+            ->public()
+            ->latest()
+            ->paginate(self::PAGINATE_COUNT);
     }
 
     public function paginateByCategory(Category $category)
     {
         return $category
             ->articles()
-            ->asPagination();
+            ->withRelations()
+            ->public()
+            ->latest()
+            ->paginate(self::PAGINATE_COUNT);
     }
 
     public function paginateByTag(Tag $tag)
     {
         return $tag
             ->articles()
-            ->asPagination();
+            ->withRelations()
+            ->public()
+            ->latest()
+            ->paginate(self::PAGINATE_COUNT);
     }
 
     public function paginateMyArticles(User $user)
@@ -41,7 +55,12 @@ class ArticleService
             ->articles()
             ->withRelations()
             ->latest()
-            ->paginate(10);
+            ->paginate(self::PAGINATE_COUNT);
+    }
+
+    public function loadDetail(Article $article): Article
+    {
+        return $article->loadWithRelations()->makeVisible(['content']);
     }
 
     public function create(User $user, array $data): Article

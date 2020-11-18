@@ -8,47 +8,47 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Http\Requests\StoreArticleRequest;
-use App\Services\ArticleService;
+use App\Repositories\Article\ArticleRepository;
 
 class ArticleController extends Controller
 {
-    private ArticleService $articlerService;
+    private ArticleRepository $articles;
 
-    public function __construct(ArticleService $articlerService)
+    public function __construct(ArticleRepository $articles)
     {
-        $this->articlerService = $articlerService;
+        $this->articles = $articles;
     }
 
     public function index()
     {
-        return $this->articlerService->paginate();
+        return $this->articles->paginate();
     }
 
     public function indexByUser(User $user)
     {
-        return $this->articlerService->paginateByUser($user);
+        return $this->articles->paginateByUser($user);
     }
 
     public function indexByCategory(Category $category)
     {
-        return $this->articlerService->paginateByCategory($category);
+        return $this->articles->paginateByCategory($category);
     }
 
     public function indexByTag(Tag $tag)
     {
-        return $this->articlerService->paginateByTag($tag);
+        return $this->articles->paginateByTag($tag);
     }
 
     public function myArticles()
     {
         $user = auth()->user();
-        return $this->articlerService->paginateMyArticles($user);
+        return $this->articles->paginateMyArticles($user);
     }
 
     public function store(StoreArticleRequest $request)
     {
         $user = auth()->user();
-        $article = $this->articlerService->create($user, $request->validated());
+        $article = $this->articles->create($user, $request->validated());
 
         return response()->json($article, 201);
     }
@@ -57,21 +57,21 @@ class ArticleController extends Controller
     {
         $this->authorize('view', $article);
 
-        return $article->loadWithRelations()->makeVisible(['content']);
+        return $this->articles->loadDetail($article);
     }
 
     public function update(StoreArticleRequest $request, Article $article)
     {
         $this->authorize('update', $article);
-        $this->articlerService->update($article, $request->validated());
+        $this->articles->update($article, $request->validated());
 
-        return $article->loadWithRelations()->makeVisible(['content']);
+        return $this->articles->loadDetail($article);
     }
 
     public function destroy(Article $article)
     {
         $this->authorize('delete', $article);
-        $this->articlerService->delete($article);
+        $this->articles->delete($article);
 
         return response()->noContent();
     }

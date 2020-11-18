@@ -33,7 +33,7 @@ Route::prefix('v1')->group(function () {
     Route::get('tags/{tag:slug}', [TagController::class, 'show']);
     Route::get('tags/{tag:slug}/articles', [ArticleController::class, 'indexByTag']);
     Route::get('users', [UserController::class, 'index']);
-    Route::get('users/{id}', [UserController::class, 'show']);
+    Route::get('users/{user}', [UserController::class, 'show']);
     Route::get('users/{user}/articles', [ArticleController::class, 'indexByUser']);
 
     Route::middleware('auth:sanctum')->group(function () {
