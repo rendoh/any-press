@@ -58,6 +58,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/any-press.pem github@118.27.5.185 bash -c "'
             cd /var/www/html/laravel
+            sudo composer install --optimize-autoloader --no-dev
             sudo php artisan migrate --force
             sudo php artisan cache:clear
             sudo php artisan config:clear
