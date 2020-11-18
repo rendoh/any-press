@@ -17,9 +17,9 @@ class ArticlePolicy
      * @param  \App\Models\Article  $article
      * @return mixed
      */
-    public function view(User $user, Article $article)
+    public function view(?User $user, Article $article)
     {
-        return $article->public || ($user && $user->id === $article->user->id);
+        return $article->public || $user->id === $article->user->id;
     }
 
     /**
