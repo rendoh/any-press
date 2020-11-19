@@ -34,9 +34,17 @@ const Home: FC = () => {
     setSearchValue(search);
   }, [search]);
 
+  const isPlainHome = page === 1 && !search;
+
   return (
     <>
       <SEO />
+      {isPlainHome && (
+        <Hero>
+          <Colored>Any</Colored>one can post <Colored>any</Colored>thing at{' '}
+          <Colored>any</Colored>time.
+        </Hero>
+      )}
       <SearchForm onSubmit={handleSubmit}>
         <SearchField
           type="text"
@@ -59,13 +67,27 @@ const Home: FC = () => {
 
 export default Home;
 
+const Hero = styled.h1`
+  text-align: center;
+  padding: 60px 30px 90px;
+  line-height: 1.8;
+  @media (max-width: 500px) {
+    font-size: 28px;
+    padding: 40px 20px 55px;
+  }
+`;
+
+const Colored = styled.span`
+  color: #f44336;
+`;
+
 const SearchForm = styled.form`
   display: flex;
   align-items: center;
   max-width: 100%;
   width: 150px;
   background: #f7f7fa;
-  padding: 3px 10px;
+  padding: 3px 3px 3px 10px;
   border-radius: 50px;
   margin: 0 0 20px auto;
   transition: width 0.25s ease-out;
@@ -80,4 +102,6 @@ const SearchField = styled.input`
   background: transparent;
   outline: none;
 `;
-const SearchButton = styled(IconButton)``;
+const SearchButton = styled(IconButton)`
+  min-width: 36px;
+`;
