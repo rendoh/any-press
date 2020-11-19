@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { FC, FormEvent, useState } from 'react';
+import React, { FC, FormEvent, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Icon, IconButton } from 'rsuite';
 import { useArticles } from '../../hooks/queries/useArticles';
@@ -30,6 +30,9 @@ const Home: FC = () => {
   };
 
   const [searchValue, setSearchValue] = useState(search);
+  useEffect(() => {
+    setSearchValue(search);
+  }, [search]);
 
   return (
     <>
