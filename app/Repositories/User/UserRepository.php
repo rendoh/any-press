@@ -2,7 +2,9 @@
 
 namespace App\Repositories\User;
 
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 
 class UserRepository
 {
