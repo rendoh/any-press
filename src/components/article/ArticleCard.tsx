@@ -94,16 +94,10 @@ const Wrapper = styled(Panel)`
 `;
 
 const imageStyle = css`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 30%;
+  display: block;
+  width: 100%;
   height: 100%;
-  position: absolute;
-  @media screen and (max-width: 600px) {
-    width: 100%;
-    height: ${verticalImageHeight}px;
-  }
+  transition: all 0.25s ease-out;
 `;
 
 const Image = styled.img`
@@ -118,6 +112,27 @@ const PlaceholderImage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const ImageLink = styled(Link)`
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    height: ${verticalImageHeight}px;
+  }
+  &:hover ${Image}, &:hover ${PlaceholderImage} {
+    transform: scale(1.05);
+  }
+  &:hover ${PlaceholderImage} {
+    background: #c0c0c0;
+  }
 `;
 
 const ImageIcon = styled(Icon)`
@@ -168,10 +183,6 @@ const AvatarTrigger = styled.div`
   background: none;
   border: none;
   padding: 0;
-`;
-
-const ImageLink = styled(Link)`
-  display: block;
 `;
 
 const EditButton = styled(Button)`
