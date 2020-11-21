@@ -25,11 +25,6 @@ class ArticleController extends Controller
         return $this->articles->paginate($request->search);
     }
 
-    public function indexByUser(User $user)
-    {
-        return $this->articles->paginateByUser($user);
-    }
-
     public function indexByCategory(Category $category)
     {
         return $this->articles->paginateByCategory($category);
@@ -38,12 +33,6 @@ class ArticleController extends Controller
     public function indexByTag(Tag $tag)
     {
         return $this->articles->paginateByTag($tag);
-    }
-
-    public function myArticles()
-    {
-        $user = auth()->user();
-        return $this->articles->paginateMyArticles($user);
     }
 
     public function store(StoreArticleRequest $request)

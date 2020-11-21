@@ -34,12 +34,12 @@ Route::prefix('v1')->group(function () {
     Route::get('tags/{tag:slug}/articles', [ArticleController::class, 'indexByTag']);
     Route::get('users', [UserController::class, 'index']);
     Route::get('users/{user}', [UserController::class, 'show']);
-    Route::get('users/{user}/articles', [ArticleController::class, 'indexByUser']);
+    Route::get('users/{user}/articles', [UserController::class, 'articles']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('user', [UserController::class, 'account']);
         Route::put('user', [UserController::class, 'update']);
-        Route::get('user/articles', [ArticleController::class, 'myArticles']);
+        Route::get('user/articles', [UserController::class, 'myArticles']);
         Route::post('upload', ImageController::class);
         Route::post('articles', [ArticleController::class, 'store']);
         Route::put('articles/{article}', [ArticleController::class, 'update']);
