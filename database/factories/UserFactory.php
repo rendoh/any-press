@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class UserFactory extends Factory
 {
@@ -33,11 +34,9 @@ class UserFactory extends Factory
                 if ($this->faker->numberBetween(0, 10) > 7) {
                     return null;
                 }
-                $filename = $this->faker->image('storage/app/public/uploads', 640, 640, 'people', false);
-                if (!$filename) {
-                    return null;
-                }
-                return Storage::url('uploads/'.$filename);
+                $filepath = UploadedFile::fake()->image('avatar.png', 640, 640)->store('uploads', 'public');
+                ;
+                return Storage::url($filepath);
             },
         ];
     }

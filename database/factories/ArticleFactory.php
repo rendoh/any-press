@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class ArticleFactory extends Factory
 {
@@ -34,11 +35,9 @@ class ArticleFactory extends Factory
                 if ($this->faker->numberBetween(0, 10) > 5) {
                     return null;
                 }
-                $filename = $this->faker->image('storage/app/public/uploads', 1280, 720, null, false);
-                if (!$filename) {
-                    return null;
-                }
-                return Storage::url('uploads/'.$filename);
+                $filepath = UploadedFile::fake()->image('image.png', 1280, 720)->store('uploads', 'public');
+                ;
+                return Storage::url($filepath);
             },
         ];
     }
