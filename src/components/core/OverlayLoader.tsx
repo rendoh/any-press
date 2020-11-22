@@ -4,11 +4,13 @@ import { Loader } from 'rsuite';
 
 type OverlayLoaderProps = {
   backdrop?: boolean;
+  'data-testid'?: string;
 };
 
-const OverlayLoader: FC<OverlayLoaderProps> = ({ backdrop }) => (
-  <Icon backdrop={backdrop} center={!backdrop} />
-);
+const OverlayLoader: FC<OverlayLoaderProps> = ({
+  backdrop,
+  'data-testid': dataTestId = 'loader',
+}) => <Icon backdrop={backdrop} center={!backdrop} data-testid={dataTestId} />;
 
 export default OverlayLoader;
 

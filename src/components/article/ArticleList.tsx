@@ -6,18 +6,20 @@ import ArticleCard from './ArticleCard';
 type ArticleListProps = {
   articles: Article[];
   emptyText?: string | false;
+  'data-testid'?: string;
 };
 
 const ArticleList: FC<ArticleListProps> = ({
   articles,
   emptyText = '記事が見つかりませんでした',
+  'data-testid': dataTestId,
 }) =>
   articles.length === 0 ? (
     emptyText ? (
-      <EmptyText>{emptyText}</EmptyText>
+      <EmptyText data-testid={dataTestId}>{emptyText}</EmptyText>
     ) : null
   ) : (
-    <Wrapper>
+    <Wrapper data-testid={dataTestId}>
       {articles.map((article) => (
         <ArticleCard key={article.id} article={article} />
       ))}
