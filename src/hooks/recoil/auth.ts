@@ -3,7 +3,7 @@ import { User } from '../../types/user';
 
 const authenticatedUserState = atom<User | null>({
   key: 'authenticatedUserState',
-  default: window.__INITIAL_DATA__.user,
+  default: window.__INITIAL_DATA__?.user ?? null,
 });
 
 const isAuthenticatedState = selector({
@@ -25,8 +25,8 @@ export function useSetAuthenticatedUser() {
 
 declare global {
   interface Window {
-    __INITIAL_DATA__: {
-      user: User | null;
+    __INITIAL_DATA__?: {
+      user?: User | null;
     };
   }
 }
