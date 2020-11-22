@@ -40,7 +40,7 @@ const Home: FC = () => {
     <>
       <SEO />
       {isPlainHome && (
-        <Hero>
+        <Hero data-testid="home-hero">
           <Colored>Any</Colored>one can post <Colored>any</Colored>thing at{' '}
           <Colored>any</Colored>time.
         </Hero>
@@ -57,7 +57,7 @@ const Home: FC = () => {
         <OverlayLoader />
       ) : (
         <>
-          <ArticleList articles={articles} />
+          <ArticleList data-testid="home-article-list" articles={articles} />
           <Pagination pages={pageCount} activePage={page} onSelect={goto} />
         </>
       )}
