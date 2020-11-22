@@ -19,7 +19,7 @@ const Avatar: FC<AvatarProps> = ({ avatar, className, size }) =>
     />
   ) : (
     <RsuiteAvatar className={className} circle alt="" size={size}>
-      <Icon icon="user" />
+      <Icon icon="user" data-testid="avatar-user-icon" />
     </RsuiteAvatar>
   );
 
